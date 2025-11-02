@@ -1,0 +1,168 @@
+/* --- Base Page Layout --- */
+.about-page-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+}
+
+/* --- Header Styling (Consistent with Contact Page) --- */
+.about-header {
+    background-color: #f0f0f0; /* Light background for contrast */
+    border-bottom: 4px solid #00a89d; /* Accent line */
+    padding: 40px 0;
+    margin-bottom: 40px;
+    text-align: center;
+}
+
+.about-header h1 {
+    color: #003366; /* Deep blue heading */
+    font-size: 2.5em;
+    margin-bottom: 10px;
+}
+
+.about-header p {
+    color: #444;
+    font-size: 1.1em;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.header-icon {
+    font-size: 3em;
+    color: #00a89d; /* Teal icon */
+    margin-bottom: 10px;
+}
+
+/* --- Section Headings --- */
+.about-content h2 {
+    color: #003366;
+    font-size: 1.8em;
+    margin-bottom: 25px;
+    text-align: center;
+    border-bottom: 2px solid #00a89d;
+    display: inline-block;
+    padding-bottom: 5px;
+}
+
+/* Aligning all h2 elements to center */
+.mission-section,
+.pillars-section,
+.cta-section {
+    text-align: center;
+    margin-bottom: 50px;
+}
+
+.mission-text-long {
+    max-width: 900px;
+    margin: 0 auto 30px auto;
+    font-size: 1.1em;
+    color: #333;
+}
+
+/* --- Pillars Section (The 3 Cards) --- */
+.pillar-cards-container {
+    display: flex;
+    justify-content: space-between;
+    gap: 30px;
+    margin-top: 30px;
+}
+
+.pillar-card {
+    flex: 1;
+    padding: 30px;
+    background-color: #f9f9f9; /* Off-white for visual break */
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 51, 102, 0.1); /* Subtle deep blue shadow */
+    transition: transform 0.3s ease;
+}
+
+.pillar-card:hover {
+    transform: translateY(-5px); /* Subtle lift on hover */
+    box-shadow: 0 6px 15px rgba(0, 51, 102, 0.2);
+}
+
+.pillar-icon {
+    font-size: 3em;
+    color: #00a89d; /* Accent color for icons */
+    margin-bottom: 15px;
+}
+
+.pillar-card h4 {
+    color: #003366;
+    font-size: 1.25em;
+    margin-bottom: 10px;
+}
+
+.pillar-card p {
+    font-size: 0.95em;
+    color: #555;
+}
+
+/* --- Call to Action (CTA) Section --- */
+.cta-section {
+    background-color: #003366; /* Reverse the theme for high contrast */
+    color: white;
+    padding: 50px 20px;
+    border-radius: 8px;
+}
+
+.cta-section h2 {
+    color: white;
+    border-bottom: 2px solid #00a89d;
+}
+
+.cta-section p {
+    font-size: 1.1em;
+    margin-bottom: 30px;
+}
+
+.cta-button {
+    display: inline-block;
+    padding: 15px 30px;
+    margin: 0 10px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    border: 2px solid transparent;
+}
+
+.cta-button {
+    /* Primary CTA */
+    background-color: #00a89d; /* Teal accent */
+    color: white;
+}
+
+.cta-button:hover {
+    background-color: #007f77; /* Darker teal */
+    transform: scale(1.02);
+}
+
+.secondary-cta {
+    /* Secondary CTA (Invert colors slightly) */
+    background-color: transparent;
+    border-color: white;
+    color: white;
+}
+
+.secondary-cta:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    transform: scale(1.02);
+}
+
+/* --- Responsive Design --- */
+@media (max-width: 900px) {
+    .pillar-cards-container {
+        flex-direction: column; /* Stacks cards vertically */
+        align-items: center;
+    }
+
+    .pillar-card {
+        width: 100%;
+        max-width: 450px; /* Constraints card width on smaller screens */
+        margin-bottom: 20px;
+    }
+}

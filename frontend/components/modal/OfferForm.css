@@ -1,0 +1,115 @@
+/* OfferForm.css */
+
+.offer-form-container {
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 30px;
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 51, 102, 0.1);
+}
+
+.offer-form-container h2 {
+    color: #003366;
+    border-bottom: 3px solid #00a89d;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+    text-transform: capitalize;
+}
+
+.offer-form-container p {
+    color: #555;
+    margin-bottom: 30px;
+}
+
+/* Shared and Specific Field Styling */
+.offer-form h3 {
+    color: #003366;
+    font-size: 1.2em;
+    margin-top: 30px;
+    margin-bottom: 15px;
+}
+
+.offer-form label {
+    display: block;
+    margin-bottom: 15px;
+    font-weight: bold;
+    color: #333;
+}
+
+.offer-form input[type="text"],
+.offer-form textarea,
+.offer-form select {
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box; /* Include padding in width */
+    transition: border-color 0.2s ease;
+}
+
+.offer-form input[type="text"]:focus,
+.offer-form textarea:focus,
+.offer-form select:focus {
+    border-color: #00a89d;
+    outline: none;
+}
+
+/* Checkbox and Radio Styling */
+.offer-form input[type="checkbox"],
+.offer-form input[type="radio"] {
+    width: auto;
+    margin-right: 10px;
+}
+
+.logistics-options label {
+    display: inline-block;
+    margin-right: 20px;
+    font-weight: normal;
+}
+
+/* Submit Button */
+.submit-btn {
+    display: block;
+    width: 100%;
+    padding: 15px;
+    margin-top: 40px;
+    background-color: #00a89d; /* Accent Teal */
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1.1em;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.submit-btn:hover {
+    background-color: #007f77;
+}
+
+/* Money CTA Box (for tomorrow's SendWave integration) */
+.money-cta-box {
+    background-color: #e6f7ff;
+    border: 1px solid #b3e0ff;
+    padding: 20px;
+    border-radius: 8px;
+    text-align: center;
+}
+
+.sendwave-btn {
+    background-color: #003366;
+    color: white;
+    padding: 12px 25px;
+    border: none;
+    border-radius: 5px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 15px;
+}
+.note {
+    font-size: 0.85em;
+    color: #999;
+    margin-top: 10px;
+}

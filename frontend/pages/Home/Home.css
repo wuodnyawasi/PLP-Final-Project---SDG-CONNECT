@@ -1,0 +1,129 @@
+/* --- Base Page Layout --- */
+.home-body-container { /* Aligns with the new component name */
+  max-width: 1200px;
+  margin: 40px auto; /* Add vertical margin for spacing below the header */
+  padding: 0 20px;
+  
+  display: grid;
+  grid-template-columns: 1fr 2.5fr; /* Slightly shift balance: Text 1/3, Grid 2/3 */
+  gap: 30px; /* Increased gap for better separation */
+  align-items: start;
+}
+
+/* --- Subtitle (Text/CTA) Column --- */
+.subTitle {
+  text-align: left;
+  padding: 20px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 25px; /* Consistent spacing */
+}
+
+/* Main headings */
+.subTitle h2 {
+  font-size: 2.2rem;       
+  font-weight: 700;
+  line-height: 1.3;
+  margin: 0;
+  /* THEME ALIGNMENT: Use Deep Blue for primary heading */
+  color: #003366;           
+}
+
+/* Paragraphs */
+.subTitle p {
+  font-size: 1.15rem; /* Reduced from 1.3rem for better readability */
+  font-weight: 400;
+  line-height: 1.6;
+  margin: 0;
+  color: #333; /* Dark gray for prose */
+}
+
+/* --- CTA Buttons --- */
+.cta-buttons { /* Aligns with the new component name */
+  margin-top: 30px; /* Reduced margin */
+  display: flex;
+  flex-wrap: wrap; /* Allows wrapping on small screens */
+  gap: 15px;
+}
+
+/* Base button style for both CTAs */
+.explore-btn {
+  /* Common styles */
+  font-size: 16px;
+  font-weight: 600;
+  text-decoration: none; /* Required for <a> tags */
+  padding: 12px 28px; /* Adjusted padding */
+  border-radius: 50px;
+  cursor: pointer;
+  transition: 0.3s ease-in-out;
+  width: auto; /* Let content determine width */
+  min-width: 180px; /* Ensure they aren't too small */
+  text-align: center;
+}
+
+/* Primary CTA: Find Projects (Teal Accent) */
+.explore-prj {
+  /* THEME ALIGNMENT: Use Accent Teal */
+  background: #00a89d;
+  color: white;
+  border: 2px solid #00a89d;
+}
+
+.explore-prj:hover {
+   background-color: #003366; /* Deep Blue Fill */
+  color: white;
+  transform: translateY(-2px);
+}
+
+/* Secondary CTA: Offer Resources (Outline/Deep Blue Text) */
+.explore-rs {
+  /* THEME ALIGNMENT: Outline with Deep Blue */
+   background-color: #003366; /* Deep Blue Fill */
+  color: white;
+  border: 2px solid #003366;
+}
+
+.explore-rs:hover {
+  background: #00a89d;
+  color: white;
+  transform: translateY(-2px);
+}
+
+/* --- Grid Container --- */
+.gridContainer {
+  margin: 0; /* Remove excess margin, let home-body-container handle it */
+  padding: 10px;
+}
+
+
+/* === Responsive Adjustments === */
+@media (max-width: 1024px) {
+  .subTitle h2 {
+    font-size: 1.8rem;
+  }
+
+  .subTitle p {
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .home-body-container {
+    grid-template-columns: 1fr; /* Stack vertically */
+    gap: 40px;
+  }
+
+  .subTitle {
+    text-align: center; /* Center text for mobile */
+    padding: 0 10px;
+  }
+  
+  .cta-buttons {
+    justify-content: center; /* Center buttons */
+  }
+
+  .explore-btn {
+      width: 100%; /* Full width buttons for mobile stack */
+      max-width: 300px;
+  }
+}

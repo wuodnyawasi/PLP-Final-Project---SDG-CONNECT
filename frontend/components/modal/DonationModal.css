@@ -1,0 +1,129 @@
+/* DonationModal.css */
+
+/* --- Modal Overlay --- */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.7); /* Dark semi-transparent background */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1001; /* Must be above the navbar z-index (1000) */
+}
+
+/* --- Modal Content Box --- */
+.modal-content {
+    background-color: white;
+    padding: 30px;
+    border-radius: 10px;
+    max-width: 90%;
+    width: 700px;
+    position: relative;
+    box-shadow: 0 10px 25px rgba(0, 51, 102, 0.5); /* Deep blue shadow */
+    color: #333;
+    animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.modal-content h3 {
+    color: #003366; /* Deep blue heading */
+    font-size: 1.8em;
+    margin-bottom: 5px;
+}
+
+.modal-content p {
+    margin-bottom: 25px;
+}
+
+/* --- Close Button --- */
+.modal-close-btn {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: none;
+    border: none;
+    font-size: 1.5em;
+    cursor: pointer;
+    color: #003366;
+    transition: color 0.2s ease;
+}
+
+.modal-close-btn:hover {
+    color: #00a89d; /* Accent color on hover */
+}
+
+/* --- Category Grid --- */
+.category-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+}
+
+.category-card {
+    flex: 1 1 calc(50% - 20px); /* Two columns layout */
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    text-align: center;
+    transition: box-shadow 0.3s ease, transform 0.2s ease;
+    min-width: 250px;
+}
+
+.category-card:hover {
+    box-shadow: 0 4px 12px rgba(0, 168, 157, 0.2); /* Teal accent shadow */
+    transform: translateY(-3px);
+}
+
+.category-icon {
+    font-size: 2.5em;
+    color: #00a89d; /* Accent teal for icons */
+    margin-bottom: 10px;
+}
+
+.category-card h4 {
+    color: #003366;
+    margin-bottom: 5px;
+}
+
+.donate-link {
+    display: inline-block;
+    margin-top: 15px;
+    background-color: #003366; /* Deep blue button */
+    color: white;
+    padding: 8px 15px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+}
+
+.donate-link:hover {
+    background-color: #00a89d; /* Teal accent on hover */
+}
+
+/* --- Responsive adjustments --- */
+@media (max-width: 600px) {
+    .modal-content {
+        padding: 20px;
+    }
+    .category-grid {
+        flex-direction: column; /* Stack categories vertically on small screens */
+    }
+    .category-card {
+        min-width: 100%;
+    }
+}

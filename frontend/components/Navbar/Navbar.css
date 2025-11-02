@@ -1,0 +1,140 @@
+/* === Base Navbar: Color Alignment === */
+.navbar {
+  padding: 15px 25px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  /* CHANGED: Dark gray background to Deep SDG Blue */
+  background: #003366; 
+  color: white;
+  position: relative;
+  z-index: 1000;
+}
+
+
+
+.navbar-right {
+  display: flex;
+  align-items: center;
+  gap: 25px;
+}
+
+/* === Login Button: Color Alignment === */
+.login-btn {
+  background: transparent;
+  font-size: 16px;
+  color: white;
+  /* CHANGED: Border color to SDG Accent Teal */
+  border: 1px solid #00a89d; 
+  padding: 8px 22px;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: 0.3s ease-in-out;
+}
+
+.login-btn:hover {
+  /* CHANGED: Hover background to SDG Accent Teal */
+  background-color: #00a89d; 
+  /* Ensuring text remains white for contrast */
+  color: #003366; 
+  border-color: #00a89d; /* Keep border the same */
+}
+
+/* === Search Icon: Color Alignment === */
+.search-icon {
+  cursor: pointer;
+  transition: color 0.3s ease-in-out;
+}
+
+.search-icon:hover > * { /* Target the icon inside the div */
+  /* CHANGED: Hover color to SDG Accent Teal */
+  color: #00a89d !important; 
+}
+
+/* --- Text Logo Styling --- */
+.logo-text {
+    font-size: 1.8em; /* Slightly larger than menu items */
+    font-weight: 700;
+    color: white; /* Base color is white */
+    letter-spacing: -1px; /* Tighter letter spacing for a modern look */
+    user-select: none;
+    cursor: pointer;
+    /* Alignment adjustments to match the original logo class */
+    height: 120px; /* Use the original height to maintain layout */
+    line-height: 120px; 
+}
+
+/* Use the accent color for a key part of the name */
+.logo-accent {
+    color: #00a89d; /* SDG Accent Teal */
+    font-weight: 900;
+}
+
+/* Update the original .logo class if you still have layout issues */
+.logo { /* If you kept the original .logo class on the parent div */
+  width: auto; /* Allow the text width to determine the size */
+}
+
+/* === Navbar Menu (Desktop): Color Alignment === */
+.navbar-menu {
+  display: flex;
+  align-items: center;
+  list-style: none;
+  gap: 40px;
+  margin: 0;
+  padding: 0;
+}
+
+.navbar-menu li {
+  padding: 0;
+}
+.navbar-menu li a {
+ color: #00a89d;
+  text-decoration: none;
+  padding-bottom: 2px;
+  transition: all 0.3s ease-in-out ;
+
+}
+.navbar-menu li:hover a{
+  color: #00a89d;
+}
+.navbar-menu li.active a{
+  color: #00a89d;
+  border-bottom: 2px solid #00a89d ;
+}
+
+/* === Hamburger Icon: No changes needed to the icon itself, colors are handled by JS and parent styles */
+.menu-toggle {
+  display: none;
+  cursor: pointer;
+  transition: transform 0.3s ease-in-out;
+}
+
+.menu-toggle:hover {
+  transform: scale(1.1);
+}
+
+/* === Responsive: Small Screens: Color Alignment === */
+@media (max-width: 768px) {
+  /* ... (Existing responsive styles for .navbar-menu layout) ... */
+
+  /* Dropdown Menu Below: Active State Fix */
+  /* Make links full width to fill the column space */
+  .navbar-menu li a {
+    width: 100%;
+    text-align: center;
+    padding: 10px 0; /* Increase vertical padding for better touch targets */
+    border-bottom: none !important; /* Remove desktop underline */
+  }
+  
+  /* Style the entire list item for the active page on mobile */
+  .navbar-menu li.active {
+    /* Highlight the active link with a background color */
+    background-color: #004d99; /* A slightly lighter blue for contrast */
+  }
+
+  /* Ensure the text is still the accent color on the active mobile link */
+  .navbar-menu li.active a {
+    color: #00a89d;
+  }
+}

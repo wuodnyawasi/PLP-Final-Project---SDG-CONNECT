@@ -1,0 +1,207 @@
+/* --- Base Page Layout --- */
+.profile-page-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    font-family: Arial, sans-serif;
+    line-height: 1.5;
+}
+
+/* --- Section 1: Welcome Banner (Deep Blue) --- */
+.profile-welcome-banner {
+    background-color: #003366; /* Deep Blue background */
+    color: white;
+    padding: 30px 20px;
+    margin-bottom: 30px;
+    border-radius: 8px;
+    text-align: center;
+}
+
+.profile-welcome-banner h1 {
+    font-size: 2.2em;
+    margin-bottom: 5px;
+    font-weight: 700;
+}
+
+.profile-welcome-banner p {
+    font-size: 1.1em;
+    color: #f0f0f0;
+}
+
+/* --- Main Content Layout (Split) --- */
+.profile-content {
+    display: flex;
+    gap: 30px;
+}
+
+.dashboard-section,
+.profile-detail-section {
+    padding: 20px;
+    border-radius: 8px;
+    background-color: #ffffff;
+    border: 1px solid #e0e0e0;
+}
+
+.dashboard-section {
+    flex: 2; /* Dashboard takes more space */
+}
+
+.profile-detail-section {
+    flex: 1; /* Profile details column */
+    max-width: 350px;
+    text-align: center;
+    /* Optional: Deep blue border on the side for profile focus */
+    border-top: 5px solid #003366; 
+}
+
+/* Section Headings */
+.dashboard-section h2,
+.profile-detail-section h2 {
+    color: #003366;
+    font-size: 1.5em;
+    margin-bottom: 20px;
+    padding-bottom: 5px;
+    border-bottom: 2px solid #00a89d;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* --- Dashboard Grid Styling --- */
+.metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); /* Responsive grid */
+    gap: 20px;
+}
+
+.metric-card {
+    background-color: #f4f8fb; /* Light background for metrics */
+    padding: 20px;
+    border-radius: 6px;
+    text-align: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.metric-icon {
+    font-size: 2em;
+    color: #00a89d; /* Teal icon */
+    margin-bottom: 10px;
+}
+
+.metric-card h4 {
+    font-size: 2em;
+    color: #003366; /* Deep blue number */
+    margin: 0;
+}
+
+.metric-card p {
+    font-size: 0.9em;
+    color: #555;
+    margin: 0;
+}
+
+/* Highlight cards for contrast */
+.completed-card { border-left: 5px solid #4c9f38; } /* Green accent */
+.underway-card { border-left: 5px solid #fd6925; } /* Orange accent */
+
+/* --- Profile Details Styling --- */
+.profile-picture {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%; /* Round profile picture */
+    object-fit: cover;
+    border: 4px solid #00a89d; /* Teal border */
+    margin-bottom: 15px;
+}
+
+.profile-header-card h3 {
+    color: #003366;
+    margin: 0 0 5px 0;
+    font-size: 1.8em;
+}
+
+.profile-location {
+    color: #555;
+    font-size: 0.9em;
+    margin-bottom: 20px;
+}
+
+.contact-info-list p {
+    text-align: left;
+    margin: 5px 0;
+    color: #333;
+}
+
+.detail-icon {
+    color: #00a89d;
+    margin-right: 10px;
+}
+
+/* --- SDG Tags --- */
+.sdg-contribution-list {
+    margin-top: 25px;
+    text-align: left;
+}
+
+.sdg-contribution-list h4 {
+    color: #003366;
+    margin-bottom: 10px;
+    font-size: 1em;
+    font-weight: bold;
+}
+
+.sdg-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.sdg-tag {
+    padding: 5px 10px;
+    color: white;
+    font-size: 0.8em;
+    border-radius: 15px;
+    font-weight: bold;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+/* --- Action Button --- */
+.plan-project-button {
+    width: 100%;
+    background-color: #00a89d; /* Teal accent/action color */
+    color: white;
+    padding: 15px;
+    border: none;
+    border-radius: 5px;
+    font-size: 1.1em;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 30px;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.plan-project-button:hover {
+    background-color: #007f77;
+    transform: translateY(-1px);
+}
+
+/* --- Responsive Layout --- */
+@media (max-width: 900px) {
+    .profile-content {
+        flex-direction: column; /* Stack columns vertically */
+    }
+
+    .profile-detail-section {
+        max-width: 100%; /* Full width on small screens */
+        order: -1; /* Place profile details before dashboard on mobile */
+    }
+
+    .dashboard-section h2, 
+    .profile-detail-section h2 {
+        justify-content: center;
+    }
+}

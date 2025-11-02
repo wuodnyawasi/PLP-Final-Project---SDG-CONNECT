@@ -1,0 +1,48 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
+
+*{
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  font-family: 'Roboto';
+}
+
+body{
+  min-height: 100vh;
+  
+}
+
+
+/* Full-page blurred background */
+.bg-blur {
+  position: fixed;       /* stay fixed behind content */
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url('/background.png');
+  background-size: cover;
+  background-position: center;
+  filter: blur(5px);     /* adjust blur amount */
+  z-index: -1;           /* behind everything */
+}
+
+
+a{
+  text-decoration: none;
+  color: inherit
+}
+
+.app{
+  width: 100%;
+  margin: auto;
+}
+.navbar-menu{
+  display: flex;
+  list-style: none;
+  gap: 20px;
+  color: white;
+  font-size: 25px;
+  
+  
+}

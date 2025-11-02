@@ -1,0 +1,135 @@
+/* --- Footer Base Styles --- */
+.footer-container {
+    background-color: #003366; /* A deep, professional blue (like UN colors) */
+    color: #f0f0f0; /* Light gray text for contrast */
+    padding: 40px 20px;
+    font-family: Arial, sans-serif;
+    border-top: 5px solid #00a89d; /* Accent color to highlight the connection/action theme */
+}
+
+/* --- Content Wrapper for Alignment --- */
+.footer-content {
+    max-width: 1200px; /* Standard website content width */
+    margin: 0 auto;
+    display: flex;
+    flex-wrap: wrap; /* Allows sections to wrap on smaller screens */
+    justify-content: space-between;
+    gap: 30px; /* Space between the columns */
+}
+
+/* --- Individual Section Styling --- */
+.footer-section {
+    flex: 1; /* Allows columns to take up proportional space */
+    min-width: 200px; /* Ensures minimum width on large screens */
+}
+
+.footer-section h4 {
+    color: #ffffff;
+    font-size: 1.1em;
+    margin-bottom: 15px;
+    border-bottom: 2px solid rgba(255, 255, 255, 0.1); /* Subtle separator */
+    padding-bottom: 5px;
+}
+
+/* --- Brand and Mission Section --- */
+.footer-brand {
+    max-width: 300px;
+}
+
+.footer-logo-text { /* NEW: Matches the base text style */
+    font-size: 1.8em;
+    font-weight: 700; /* Matching Navbar's font weight for "SDG" */
+    color: white; /* Base color is white */
+    letter-spacing: -1px; /* Tighter letter spacing for modern look */
+    margin-bottom: 10px;
+}
+
+.footer-logo-accent { /* NEW: Matches the accent text style */
+    color: #00a89d; /* SDG Accent Teal */
+    font-weight: 900; /* Matching Navbar's font weight for "Connect" */
+}
+
+.mission-text {
+    font-size: 0.9em;
+    line-height: 1.5;
+    margin-bottom: 20px;
+}
+
+.copyright-text {
+    font-size: 0.8em;
+    color: rgba(255, 255, 255, 0.6);
+}
+
+/* --- Link Sections (Quick Links & Support) --- */
+.footer-links ul,
+.footer-legal ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.footer-links li,
+.footer-legal li {
+    margin-bottom: 8px;
+}
+
+.footer-links a,
+.footer-legal a {
+    color: #f0f0f0;
+    text-decoration: none;
+    font-size: 0.9em;
+    transition: color 0.3s ease;
+}
+
+.footer-links a:hover,
+.footer-legal a:hover {
+    color: #00a89d; /* Hover effect with accent color */
+    text-decoration: underline;
+}
+
+/* --- Social Media Section --- */
+.social-icons {
+    display: flex;
+    gap: 15px;
+    font-size: 1.5em; /* Size of the icons */
+}
+
+.social-icons a {
+    color: #f0f0f0;
+    transition: color 0.3s ease, transform 0.3s ease;
+}
+
+.social-icons a:hover {
+    color: #00a89d; /* Hover color */
+    transform: translateY(-3px); /* Subtle lift on hover */
+}
+
+/* --- Responsive Design --- */
+@media (max-width: 768px) {
+    .footer-content {
+        flex-direction: column; /* Stacks sections vertically */
+        align-items: center; /* Centers content */
+        text-align: center;
+    }
+
+    .footer-section {
+        min-width: 100%; /* Sections take up full width */
+        margin-bottom: 20px;
+    }
+
+    .footer-section h4 {
+        border-bottom: none; /* Remove separator on small screens */
+    }
+
+    .footer-links ul,
+    .footer-legal ul {
+        display: flex; /* Makes links inline */
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 10px;
+    }
+
+    .social-icons {
+        justify-content: center; /* Centers social icons */
+    }
+}

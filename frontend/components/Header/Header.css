@@ -1,0 +1,77 @@
+.header {
+  position: relative;
+  width: 100%;
+  min-height: 40vh; /* adjust as needed */
+  display: flex;
+  align-items:normal; /* vertically center content */
+  justify-content: center;
+  padding: 10px;
+  box-sizing: border-box;
+  margin-top: 30px;
+  color: white;
+  z-index: 1;
+}
+
+.header-contents {
+  display: flex;
+  align-items: flex-start; /* align top edges */
+  justify-content: space-between; /* force space between stack and text */
+  max-width: 1200px;
+  width: 100%;
+  gap: 120px; /* additional spacing between stack and text */
+  flex-wrap: wrap; /* allows stacking on small screens */
+}
+
+.header-text {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  flex: 1; /* text takes remaining width */
+  min-width: 300px; /* prevent shrinking too much */
+}
+
+.header-text h2 {
+  font-size: 3rem;
+  margin-top: 40px;
+  margin-bottom: 60px;
+  font-weight: 700;
+  color: #4d4c4c;
+}
+
+.header-text p {
+  font-size: 30px;
+  line-height: 1.5;
+  margin: 0;
+  max-width: 100;
+  color: black;
+  text-shadow: 0 2px 6px rgba(0,0,0,0.5);
+}
+
+/* SDG stack adjustments */
+.sdg-stack {
+  max-height: 400px; /* ensure stack isn’t too tall */
+  overflow: hidden;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  .header-contents {
+    flex-direction: column;
+    align-items: center;
+    gap: 25px;
+  }
+
+  .header-text h2 {
+    font-size: 2rem;
+    text-align: center;
+  }
+
+  .header-text p {
+    font-size: 1rem;
+    text-align: center;
+  }
+
+  .sdg-stack {
+    max-height: 300px;
+  }
+}

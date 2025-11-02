@@ -1,0 +1,42 @@
+.sdg-grid {
+  display: grid;
+  /* Use a 3-column layout on desktop if the images are square, giving a better visual weight */
+  grid-template-columns: repeat(3, 1fr); 
+  /* Adjusted for a better aspect ratio if the images are small */
+  gap: 15px; 
+  width: 100%;
+  max-width: 100%;
+  margin: 0 auto;
+}
+
+.sdg-item {
+    overflow: hidden; /* Ensures the zoom doesn't break the container */
+    border-radius: 5px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Slight shadow to lift images */
+}
+
+.sdg-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block; /* Removes any default bottom spacing */
+  transition: transform 0.4s ease-in-out;
+}
+
+.sdg-item img:hover {
+  /* Subtler zoom for a professional look */
+  transform: scale(1.05); 
+}
+
+@media (max-width: 1024px) {
+  .sdg-grid {
+      grid-template-columns: repeat(2, 1fr); /* 2 columns on mid-size screens */
+  }
+}
+
+@media (max-width: 768px) {
+  .sdg-grid {
+    grid-template-columns: repeat(2, 1fr); /* Keep 2 columns even on mobile for visual density */
+    gap: 10px;
+  }
+}
