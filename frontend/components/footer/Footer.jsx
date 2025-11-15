@@ -2,8 +2,7 @@ import React from 'react';
 import './Footer.css';
 import { FaFacebook, FaTwitter, FaLinkedin, FaInstagram } from 'react-icons/fa';
 
-// NOTE: You will need to install react-icons for this component:
-// npm install react-icons
+
 
 const Footer = () => {
     // Current year for the copyright notice

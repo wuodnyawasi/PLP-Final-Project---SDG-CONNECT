@@ -1,7 +1,7 @@
 // DonationModal.jsx
 import React from 'react';
 import './DonationModal.css'; // We'll create this CSS next
-import { FaTimes, FaUtensils, FaTshirt, FaCouch, FaMoneyBillWave, FaQuestion } from 'react-icons/fa';
+import { FaTimes, FaUtensils, FaTshirt, FaCouch, FaMoneyBillWave, FaQuestion, FaBook } from 'react-icons/fa';
 
 const DonationModal = ({ isOpen, onClose }) => {
     if (!isOpen) {
@@ -10,11 +10,12 @@ const DonationModal = ({ isOpen, onClose }) => {
 
     // Donation Categories
     const categories = [
-        { icon: FaUtensils, name: 'Food/Perishables', description: 'Fresh food, canned goods, dried goods.' },
-        { icon: FaTshirt, name: 'Clothing/Bedding', description: 'New or gently used apparel, blankets, sheets.' },
-        { icon: FaCouch, name: 'Home/Furniture', description: 'Appliances, furniture, household items.' },
-        { icon: FaMoneyBillWave, name: 'Money', description: 'Financial contributions and funds.' },
-        { icon: FaQuestion, name: 'Other', description: 'Skills, time, or other miscellaneous items.' },
+        { icon: FaUtensils, name: 'Food/Perishables', description: 'Flour, vegetables, cooking oils, canned goods, fresh produce.' },
+        { icon: FaTshirt, name: 'Clothing/Bedding', description: 'T-shirts, bed sheets, trousers, blankets, jackets, pillows.' },
+        { icon: FaCouch, name: 'Home/Furniture', description: 'TV, sofa, fridge, microwave, tables, chairs, appliances.' },
+        { icon: FaMoneyBillWave, name: 'Money', description: 'Cash, cheque, mobile money, bank transfer, online payments.' },
+        { icon: FaBook, name: 'Education', description: 'Books, notebooks, pens, pencils, school supplies, educational materials.' },
+        { icon: FaQuestion, name: 'Other', description: 'Skills, knowledge, training, time, expertise, miscellaneous items.' },
     ];
 
     return (

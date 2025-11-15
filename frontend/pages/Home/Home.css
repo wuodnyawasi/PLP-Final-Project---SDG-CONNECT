@@ -1,12 +1,30 @@
+/* --- Tile Wrapper --- */
+.home-body-container-tile {
+  padding: 20px;
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  border-radius: 15px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  margin: 30px auto;
+  max-width: 1300px;
+  width: 100%;
+  box-sizing: border-box;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.home-body-container-tile:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+}
+
 /* --- Base Page Layout --- */
 .home-body-container { /* Aligns with the new component name */
   max-width: 1200px;
-  margin: 40px auto; /* Add vertical margin for spacing below the header */
+  margin: 0 auto; /* Remove vertical margin since tile wrapper handles it */
   padding: 0 20px;
-  
+
   display: grid;
-  grid-template-columns: 1fr 2.5fr; /* Slightly shift balance: Text 1/3, Grid 2/3 */
-  gap: 30px; /* Increased gap for better separation */
+  grid-template-columns: 1fr 2.5fr; 
+  gap: 30px; 
   align-items: start;
 }
 
@@ -31,8 +49,7 @@
 
 /* Paragraphs */
 .subTitle p {
-  font-size: 1.15rem; /* Reduced from 1.3rem for better readability */
-  font-weight: 400;
+  font-size: 1.15rem;
   line-height: 1.6;
   margin: 0;
   color: #333; /* Dark gray for prose */
@@ -40,7 +57,7 @@
 
 /* --- CTA Buttons --- */
 .cta-buttons { /* Aligns with the new component name */
-  margin-top: 30px; /* Reduced margin */
+  margin-top: 30px; 
   display: flex;
   flex-wrap: wrap; /* Allows wrapping on small screens */
   gap: 15px;
@@ -52,7 +69,7 @@
   font-size: 16px;
   font-weight: 600;
   text-decoration: none; /* Required for <a> tags */
-  padding: 12px 28px; /* Adjusted padding */
+  padding: 12px 28px; 
   border-radius: 50px;
   cursor: pointer;
   transition: 0.3s ease-in-out;
@@ -91,8 +108,10 @@
 
 /* --- Grid Container --- */
 .gridContainer {
-  margin: 0; /* Remove excess margin, let home-body-container handle it */
+  margin: 0; 
   padding: 10px;
+  width: 100%;
+  max-width: 100%;
 }
 
 
@@ -104,6 +123,11 @@
 
   .subTitle p {
     font-size: 1rem;
+  }
+
+  .home-body-container-tile {
+    padding: 15px;
+    margin: 20px auto;
   }
 }
 
@@ -117,7 +141,7 @@
     text-align: center; /* Center text for mobile */
     padding: 0 10px;
   }
-  
+
   .cta-buttons {
     justify-content: center; /* Center buttons */
   }
@@ -125,5 +149,11 @@
   .explore-btn {
       width: 100%; /* Full width buttons for mobile stack */
       max-width: 300px;
+  }
+
+  .home-body-container-tile {
+    padding: 10px;
+    margin: 20px 10px;
+    border-radius: 10px;
   }
 }

@@ -2,7 +2,7 @@ import React from 'react';
 import './About.css';
 import { FaHandsHelping, FaGlobe, FaLightbulb, FaExchangeAlt, FaBalanceScale } from 'react-icons/fa';
 
-// NOTE: Ensure react-icons is installed: npm install react-icons
+
 
 const AboutUs = () => {
     return (

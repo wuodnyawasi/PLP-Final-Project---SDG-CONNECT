@@ -4,7 +4,6 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  /* CHANGED: Dark gray background to Deep SDG Blue */
   background: #003366; 
   color: white;
   position: relative;
@@ -24,8 +23,7 @@
   background: transparent;
   font-size: 16px;
   color: white;
-  /* CHANGED: Border color to SDG Accent Teal */
-  border: 1px solid #00a89d; 
+  border: 1px solid #00a89d;
   padding: 8px 22px;
   border-radius: 50px;
   cursor: pointer;
@@ -33,11 +31,41 @@
 }
 
 .login-btn:hover {
-  /* CHANGED: Hover background to SDG Accent Teal */
-  background-color: #00a89d; 
+  background-color: #00a89d;
   /* Ensuring text remains white for contrast */
-  color: #003366; 
-  border-color: #00a89d; /* Keep border the same */
+  color: #003366;
+  border-color: #00a89d; 
+}
+
+/* === User Info: Logged In State === */
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.user-name {
+  font-size: 16px;
+  color: white;
+  font-weight: 500;
+}
+
+/* === Logout Button: Color Alignment === */
+.logout-btn {
+  background: transparent;
+  font-size: 14px;
+  color: #00a89d;
+  border: 1px solid #00a89d;
+  padding: 6px 16px;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: 0.3s ease-in-out;
+}
+
+.logout-btn:hover {
+  background-color: #00a89d;
+  color: #003366;
+  border-color: #00a89d;
 }
 
 /* === Search Icon: Color Alignment === */
@@ -47,7 +75,7 @@
 }
 
 .search-icon:hover > * { /* Target the icon inside the div */
-  /* CHANGED: Hover color to SDG Accent Teal */
+
   color: #00a89d !important; 
 }
 
@@ -70,8 +98,8 @@
     font-weight: 900;
 }
 
-/* Update the original .logo class if you still have layout issues */
-.logo { /* If you kept the original .logo class on the parent div */
+
+.logo { 
   width: auto; /* Allow the text width to determine the size */
 }
 
@@ -103,7 +131,7 @@
   border-bottom: 2px solid #00a89d ;
 }
 
-/* === Hamburger Icon: No changes needed to the icon itself, colors are handled by JS and parent styles */
+/* === Hamburger Icon:  */
 .menu-toggle {
   display: none;
   cursor: pointer;
@@ -118,7 +146,7 @@
 @media (max-width: 768px) {
   /* ... (Existing responsive styles for .navbar-menu layout) ... */
 
-  /* Dropdown Menu Below: Active State Fix */
+  /* Dropdown Menu Below: */
   /* Make links full width to fill the column space */
   .navbar-menu li a {
     width: 100%;

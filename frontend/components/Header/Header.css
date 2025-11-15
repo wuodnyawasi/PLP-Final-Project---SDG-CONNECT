@@ -3,7 +3,7 @@
   width: 100%;
   min-height: 40vh; /* adjust as needed */
   display: flex;
-  align-items:normal; /* vertically center content */
+  align-items:center; /* vertically center content */
   justify-content: center;
   padding: 10px;
   box-sizing: border-box;
@@ -15,36 +15,44 @@
 .header-contents {
   display: flex;
   align-items: flex-start; /* align top edges */
-  justify-content: space-between; /* force space between stack and text */
+  justify-content: center; /* center the Stack and text as a group */
   max-width: 1200px;
   width: 100%;
-  gap: 120px; /* additional spacing between stack and text */
+  gap: 200px; /* increased spacing between stack and text */
   flex-wrap: wrap; /* allows stacking on small screens */
 }
 
-.header-text {
+.header-text-tile {
   display: flex;
   flex-direction: column;
-  gap: 5px;
+  gap: 10px;
   flex: 1; /* text takes remaining width */
   min-width: 300px; /* prevent shrinking too much */
+  padding: 30px;
+  background-color: #f9f9f9; /* Off-white for visual break */
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 51, 102, 0.1); /* Subtle deep blue shadow */
+  transition: transform 0.3s ease;
 }
 
-.header-text h2 {
+.header-text-tile:hover {
+  transform: translateY(-5px); /* Subtle lift on hover */
+  box-shadow: 0 6px 15px rgba(0, 51, 102, 0.2);
+}
+
+.header-text-tile h2 {
   font-size: 3rem;
-  margin-top: 40px;
-  margin-bottom: 60px;
+  margin: 0;
   font-weight: 700;
-  color: #4d4c4c;
+  color: #003366; /* Deep blue heading */
 }
 
-.header-text p {
-  font-size: 30px;
+.header-text-tile p {
+  font-size: 1.5rem;
   line-height: 1.5;
   margin: 0;
-  max-width: 100;
-  color: black;
-  text-shadow: 0 2px 6px rgba(0,0,0,0.5);
+  color: #333;
 }
 
 /* SDG stack adjustments */

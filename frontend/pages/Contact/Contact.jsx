@@ -11,17 +11,39 @@ const Contact = () => {
         message: ''
     });
 
+    const [isLoading, setIsLoading] = React.useState(false);
+    const [notification, setNotification] = React.useState(null);
+
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        // **TODO: Implement form submission logic here (e.g., API call)**
-        console.log('Form Submitted:', formData);
-        alert('Thank you for your message! We will get back to you shortly.');
-        // Optionally clear the form
-        setFormData({ name: '', email: '', subject: '', message: '' });
+        setIsLoading(true);
+        setNotification(null);
+
+        try {
+            const response = await fetch('http://localhost:5000/api/contact', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(formData),
+            });
+
+            if (response.ok) {
+                setNotification({ type: 'success', message: 'Thank you for your message! We will get back to you shortly.' });
+                setFormData({ name: '', email: '', subject: '', message: '' });
+            } else {
+                setNotification({ type: 'error', message: 'Failed to send message. Please try again.' });
+            }
+        } catch (error) {
+            console.error('Error sending message:', error);
+            setNotification({ type: 'error', message: 'An error occurred. Please try again later.' });
+        } finally {
+            setIsLoading(false);
+        }
     };
 
     return (
@@ -91,7 +113,14 @@ const Contact = () => {
                             ></textarea>
                         </div>
                         
-                        <button type="submit" className="submit-button">Send Message</button>
+                        <button type="submit" className="submit-button" disabled={isLoading}>
+                            {isLoading ? 'Sending...' : 'Send Message'}
+                        </button>
+                        {notification && (
+                            <div className={`notification ${notification.type}`}>
+                                {notification.message}
+                            </div>
+                        )}
                     </form>
                 </div>
 

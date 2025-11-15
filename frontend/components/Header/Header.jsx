@@ -8,10 +8,10 @@ const Header = () => {
     <div className='header'>
       <div className="header-contents">
         <Stack />
-        <div className="header-text">
-        <h2>SDG Connect</h2>
-        <p>Connecting local hearts, hands and resources for global change</p>
-        <p>Join us in making a difference today!</p>
+        <div className="header-text-tile">
+          <h2>SDG Connect</h2>
+          <p>Connecting local hearts, hands and resources for global change</p>
+          <p>Join us in making a difference today!</p>
         </div>
        
       </div>
