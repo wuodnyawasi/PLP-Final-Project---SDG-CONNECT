@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 // Auto-increment counter schema
 const counterSchema = new mongoose.Schema({
   _id: { type: String, required: true },
-  seq: { type: Number, default: 0 }
+  seq: { type: Number, default: 0 },
 });
 
 const Counter = mongoose.model('Counter', counterSchema);
@@ -11,62 +11,62 @@ const Counter = mongoose.model('Counter', counterSchema);
 const donationSchema = new mongoose.Schema({
   donationId: {
     type: Number,
-    unique: true
+    unique: true,
   },
   user: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'User'
+    ref: 'User',
   },
   name: {
     type: String,
     required: function() {
       return !this.anonymous;
     },
-    trim: true
+    trim: true,
   },
   phone: {
     type: String,
     required: true,
-    trim: true
+    trim: true,
   },
   email: {
     type: String,
     required: true,
     lowercase: true,
-    trim: true
+    trim: true,
   },
   amount: {
     type: Number,
     required: true,
-    min: 1
+    min: 1,
   },
   anonymous: {
     type: Boolean,
-    default: false
+    default: false,
   },
   status: {
     type: String,
     enum: ['pending', 'completed', 'failed'],
-    default: 'pending'
+    default: 'pending',
   },
   mpesaTransactionId: {
     type: String,
-    trim: true
+    trim: true,
   },
   transactionDate: {
-    type: Date
+    type: Date,
   },
   checkoutRequestId: {
     type: String,
-    trim: true
+    trim: true,
   },
   donationUsedFor: {
     type: String,
     trim: true,
-    default: ''
-  }
+    default: '',
+  },
 }, {
-  timestamps: true
+  timestamps: true,
 });
 
 // Pre-save middleware to auto-increment donationId
@@ -76,7 +76,7 @@ donationSchema.pre('save', async function(next) {
       const counter = await Counter.findByIdAndUpdate(
         { _id: 'donationId' },
         { $inc: { seq: 1 } },
-        { new: true, upsert: true }
+        { new: true, upsert: true },
       );
       this.donationId = counter.seq;
     } catch (error) {

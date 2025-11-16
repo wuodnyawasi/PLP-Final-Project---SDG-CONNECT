@@ -24,7 +24,8 @@
 
 ## CI/CD
 - [x] Create GitHub Actions workflow for CI (build, test, lint)
-- [x] Create GitHub Actions workflow for CD (deploy to production)
+- [x] Update CD workflow to include tests before deployment
+- [x] Mark CI/CD as properly implemented in TODO.md
 
 ## Code Quality
 - [x] Add ESLint configuration for both frontend and backend

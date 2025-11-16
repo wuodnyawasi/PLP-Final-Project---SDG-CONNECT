@@ -4,56 +4,56 @@ const contributorSchema = new mongoose.Schema({
   user: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
-    required: true
+    required: true,
   },
   project: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Project',
-    required: true
+    required: true,
   },
   contributionType: {
     type: String,
     required: true,
-    enum: ['participant', 'resource_provider', 'donor']
+    enum: ['participant', 'resource_provider', 'donor'],
   },
   // For resource contributions
   resourceType: {
     type: String,
-    trim: true
+    trim: true,
   },
   quantity: {
     type: Number,
-    min: 0
+    min: 0,
   },
   deliveryDate: {
-    type: Date
+    type: Date,
   },
   // For donations
   donationCategory: {
     type: String,
-    enum: ['food-perishables', 'clothing-bedding', 'home-furniture', 'money', 'skills-time', 'other']
+    enum: ['food-perishables', 'clothing-bedding', 'home-furniture', 'money', 'skills-time', 'other'],
   },
   // Status tracking
   status: {
     type: String,
     enum: ['pending', 'confirmed', 'delivered', 'completed', 'cancelled'],
-    default: 'confirmed'
+    default: 'confirmed',
   },
   resourcesDelivered: {
     type: String,
     enum: ['Not delivered', 'delivered'],
-    default: 'Not delivered'
+    default: 'Not delivered',
   },
   attended: {
     type: String,
-    default: 'pending'
+    default: 'pending',
   },
   notes: {
     type: String,
-    trim: true
-  }
+    trim: true,
+  },
 }, {
-  timestamps: true
+  timestamps: true,
 });
 
 // Index for efficient queries

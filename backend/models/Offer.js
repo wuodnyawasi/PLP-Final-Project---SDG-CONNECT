@@ -3,59 +3,59 @@ const mongoose = require('mongoose');
 const offerSchema = new mongoose.Schema({
   user: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'User'
+    ref: 'User',
   },
   category: {
     type: String,
     required: true,
-    enum: ['food-perishables', 'clothing-bedding', 'home-furniture', 'money', 'skills-time', 'other']
+    enum: ['food-perishables', 'clothing-bedding', 'home-furniture', 'money', 'skills-time', 'other'],
   },
   donorName: {
     type: String,
-    trim: true
+    trim: true,
   },
   contact: {
     type: String,
     required: true,
-    trim: true
+    trim: true,
   },
   isAnonymous: {
     type: Boolean,
-    default: false
+    default: false,
   },
   // Physical items fields
   itemType: {
     type: String,
-    trim: true
+    trim: true,
   },
   quantity: {
     type: String,
-    trim: true
+    trim: true,
   },
   description: {
     type: String,
-    trim: true
+    trim: true,
   },
   logistics: {
     type: String,
-    enum: ['delivery', 'pickup']
+    enum: ['delivery', 'pickup'],
   },
   pickupLocation: {
     type: String,
-    trim: true
+    trim: true,
   },
   contactPerson: {
     type: String,
-    trim: true
+    trim: true,
   },
   // Skills fields
   skill: {
     type: String,
-    trim: true
+    trim: true,
   },
   timeCommitment: {
     type: String,
-    trim: true
+    trim: true,
   },
   method: {
     type: String,
@@ -66,20 +66,20 @@ const offerSchema = new mongoose.Schema({
         if (!value) return true;
         return ['online', 'in-person'].includes(value);
       },
-      message: 'Method must be either online or in-person'
-    }
+      message: 'Method must be either online or in-person',
+    },
   },
   experience: {
     type: String,
-    trim: true
+    trim: true,
   },
   status: {
     type: String,
     enum: ['pending', 'approved', 'rejected'],
-    default: 'pending'
-  }
+    default: 'pending',
+  },
 }, {
-  timestamps: true
+  timestamps: true,
 });
 
 module.exports = mongoose.model('Offer', offerSchema);

@@ -5,75 +5,75 @@ const userSchema = new mongoose.Schema({
   name: {
     type: String,
     required: true,
-    trim: true
+    trim: true,
   },
   email: {
     type: String,
     required: true,
     unique: true,
     lowercase: true,
-    trim: true
+    trim: true,
   },
   password: {
     type: String,
-    required: true
+    required: true,
   },
   phone: {
     type: String,
-    trim: true
+    trim: true,
   },
   dateOfBirth: {
-    type: Date
+    type: Date,
   },
   organization: {
     type: String,
-    trim: true
+    trim: true,
   },
   educationLevel: {
     type: String,
     enum: ['High School', 'Associate Degree', 'Bachelor\'s Degree', 'Master\'s Degree', 'Doctorate', 'Other'],
-    trim: true
+    trim: true,
   },
   skills: [{
     type: String,
-    trim: true
+    trim: true,
   }],
   gender: {
     type: String,
     enum: ['Male', 'Female', 'Non-binary', 'Prefer not to say', 'Other'],
-    trim: true
+    trim: true,
   },
   profilePicture: {
     type: String, // URL or path to image
-    trim: true
+    trim: true,
   },
   bio: {
     type: String,
     trim: true,
-    maxlength: 500
+    maxlength: 500,
   },
   country: {
     type: String,
-    trim: true
+    trim: true,
   },
   city: {
     type: String,
-    trim: true
+    trim: true,
   },
   exactLocation: {
     type: String,
-    trim: true
+    trim: true,
   },
   isAdmin: {
     type: Boolean,
-    default: false
+    default: false,
   },
   isDisabled: {
     type: Boolean,
-    default: false
-  }
+    default: false,
+  },
 }, {
-  timestamps: true
+  timestamps: true,
 });
 
 // Hash password before saving

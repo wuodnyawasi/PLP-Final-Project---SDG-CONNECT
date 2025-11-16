@@ -3,42 +3,42 @@ const mongoose = require('mongoose');
 const settingsSchema = new mongoose.Schema({
   emailNotifications: {
     type: Boolean,
-    default: true
+    default: true,
   },
   autoApproveOffers: {
     type: Boolean,
-    default: false
+    default: false,
   },
   maintenanceMode: {
     type: Boolean,
-    default: false
+    default: false,
   },
   smtpServer: {
     type: String,
-    default: 'smtp.gmail.com'
+    default: 'smtp.gmail.com',
   },
   adminEmail: {
     type: String,
-    default: 'owadgijagor@gmail.com'
+    default: 'owadgijagor@gmail.com',
   },
   siteName: {
     type: String,
-    default: 'SDG Connect'
+    default: 'SDG Connect',
   },
   contactEmail: {
     type: String,
-    default: 'owadgijagor@gmail.com'
+    default: 'owadgijagor@gmail.com',
   },
   maxProjectsPerUser: {
     type: Number,
-    default: 10
+    default: 10,
   },
   allowUserRegistration: {
     type: Boolean,
-    default: true
-  }
+    default: true,
+  },
 }, {
-  timestamps: true
+  timestamps: true,
 });
 
 // Ensure only one settings document exists

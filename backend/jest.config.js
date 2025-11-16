@@ -5,9 +5,9 @@ module.exports = {
     '**/*.js',
     '!**/node_modules/**',
     '!**/coverage/**',
-    '!jest.config.js'
+    '!jest.config.js',
   ],
   coverageDirectory: 'coverage',
   coverageReporters: ['text', 'lcov', 'html'],
-  setupFilesAfterEnv: ['<rootDir>/tests/setup.js']
+  setupFilesAfterEnv: ['<rootDir>/tests/setup.js'],
 };

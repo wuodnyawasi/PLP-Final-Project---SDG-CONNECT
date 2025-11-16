@@ -1,6 +1,5 @@
 const request = require('supertest');
 const express = require('express');
-const mongoose = require('mongoose');
 const cors = require('cors');
 const User = require('../models/User');
 
@@ -32,13 +31,13 @@ app.post('/api/register', validateRegistration, async (req, res) => {
     const token = require('jsonwebtoken').sign(
       { userId: user._id },
       process.env.JWT_SECRET || 'your-secret-key',
-      { expiresIn: '1h' }
+      { expiresIn: '1h' },
     );
 
     res.status(201).json({
       message: 'User registered successfully',
       token,
-      user: { id: user._id, name: user.name, email: user.email }
+      user: { id: user._id, name: user.name, email: user.email },
     });
   } catch (error) {
     res.status(500).json({ error: 'Server error' });
@@ -65,13 +64,13 @@ app.post('/api/login', validateLogin, async (req, res) => {
     const token = require('jsonwebtoken').sign(
       { userId: user._id },
       process.env.JWT_SECRET || 'your-secret-key',
-      { expiresIn: '1h' }
+      { expiresIn: '1h' },
     );
 
     res.json({
       message: 'Login successful',
       token,
-      user: { id: user._id, name: user.name, email: user.email }
+      user: { id: user._id, name: user.name, email: user.email },
     });
   } catch (error) {
     res.status(500).json({ error: 'Server error' });
@@ -87,7 +86,7 @@ describe('Authentication API', () => {
       const userData = {
         name: 'Test User',
         email: 'test@example.com',
-        password: 'password123'
+        password: 'password123',
       };
 
       const response = await request(app)
@@ -107,7 +106,7 @@ describe('Authentication API', () => {
         .send({ name: 'Test User' })
         .expect(400);
 
-      expect(response.body).toHaveProperty('error', 'All fields are required');
+      expect(response.body).toHaveProperty('error', 'Validation failed');
     });
 
     it('should return error for duplicate email', async () => {
@@ -115,7 +114,7 @@ describe('Authentication API', () => {
       await User.create({
         name: 'Existing User',
         email: 'existing@example.com',
-        password: 'password123'
+        password: 'password123',
       });
 
       // Try to create another with same email
@@ -124,7 +123,7 @@ describe('Authentication API', () => {
         .send({
           name: 'Another User',
           email: 'existing@example.com',
-          password: 'password123'
+          password: 'password123',
         })
         .expect(400);
 
@@ -138,7 +137,7 @@ describe('Authentication API', () => {
       await User.create({
         name: 'Login Test User',
         email: 'login@example.com',
-        password: 'password123'
+        password: 'password123',
       });
     });
 
@@ -147,7 +146,7 @@ describe('Authentication API', () => {
         .post('/api/login')
         .send({
           email: 'login@example.com',
-          password: 'password123'
+          password: 'password123',
         })
         .expect(200);
 
@@ -162,7 +161,7 @@ describe('Authentication API', () => {
         .post('/api/login')
         .send({
           email: 'login@example.com',
-          password: 'wrongpassword'
+          password: 'wrongpassword',
         })
         .expect(400);
 
@@ -174,7 +173,7 @@ describe('Authentication API', () => {
         .post('/api/login')
         .send({
           email: 'nonexistent@example.com',
-          password: 'password123'
+          password: 'password123',
         })
         .expect(400);
 

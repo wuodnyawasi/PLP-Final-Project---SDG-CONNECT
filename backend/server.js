@@ -14,14 +14,20 @@ const Settings = require('./models/Settings');
 const Donation = require('./models/Donation');
 const errorHandler = require('./middleware/errorHandler');
 const { validateRegistration, validateLogin, validateProjectCreation } = require('./middleware/validation');
+const { apiLimiter, authLimiter, sensitiveLimiter } = require('./middleware/rateLimiter');
+const { sanitizeUserInput, sanitizeProjectInput, sanitizeOfferInput, sanitizeDonationInput } = require('./middleware/sanitization');
 require('dotenv').config();
 
 const app = express();
 const PORT = process.env.PORT || 5000;
 
 // Middleware
-app.use(cors());
+app.use(cors({
+  origin: process.env.FRONTEND_URL || 'http://localhost:3000',
+  credentials: true,
+}));
 app.use(express.json());
+app.use(apiLimiter); // Apply general rate limiting to all routes
 
 // Security middleware
 app.use((req, res, next) => {
@@ -42,13 +48,13 @@ const storage = multer.diskStorage({
   filename: (req, file, cb) => {
     const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
     cb(null, file.fieldname + '-' + uniqueSuffix + path.extname(file.originalname));
-  }
+  },
 });
 
 const upload = multer({
   storage: storage,
   limits: {
-    fileSize: 5 * 1024 * 1024 // 5MB limit
+    fileSize: 5 * 1024 * 1024, // 5MB limit
   },
   fileFilter: (req, file, cb) => {
     const filetypes = /jpeg|jpg|png|gif/;
@@ -60,7 +66,7 @@ const upload = multer({
     } else {
       cb(new Error('Images only!'));
     }
-  }
+  },
 });
 
 // Connect to MongoDB
@@ -68,8 +74,8 @@ mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/sdg_conne
   useNewUrlParser: true,
   useUnifiedTopology: true,
 })
-.then(() => console.log('MongoDB connected'))
-.catch(err => console.error('MongoDB connection error:', err));
+  .then(() => console.log('MongoDB connected'))
+  .catch(err => console.error('MongoDB connection error:', err));
 
 // Create transporter for sending emails
 const transporter = nodemailer.createTransport({
@@ -78,8 +84,8 @@ const transporter = nodemailer.createTransport({
   secure: false, // true for 465, false for other ports
   auth: {
     user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS
-  }
+    pass: process.env.EMAIL_PASS,
+  },
 });
 
 // Contact form endpoint
@@ -104,7 +110,7 @@ app.post('/api/contact', async (req, res) => {
         <p><strong>Subject:</strong> ${subject}</p>
         <p><strong>Message:</strong></p>
         <p>${message.replace(/\n/g, '<br>')}</p>
-      `
+      `,
     };
 
     // Send email
@@ -118,7 +124,7 @@ app.post('/api/contact', async (req, res) => {
 });
 
 // Register endpoint
-app.post('/api/register', validateRegistration, async (req, res) => {
+app.post('/api/register', authLimiter, validateRegistration, async (req, res) => {
   const { name, email, password } = req.body;
 
   try {
@@ -143,7 +149,7 @@ app.post('/api/register', validateRegistration, async (req, res) => {
 });
 
 // Login endpoint
-app.post('/api/login', validateLogin, async (req, res) => {
+app.post('/api/login', authLimiter, validateLogin, async (req, res) => {
   const { email, password } = req.body;
 
   try {
@@ -158,7 +164,7 @@ app.post('/api/login', validateLogin, async (req, res) => {
       return res.status(403).json({
         error: 'Account disabled',
         message: 'Your account has been disabled. Please contact us for assistance.',
-        contactRequired: true
+        contactRequired: true,
       });
     }
 
@@ -178,8 +184,8 @@ app.post('/api/login', validateLogin, async (req, res) => {
         id: user._id,
         name: user.name,
         email: user.email,
-        isAdmin: user.isAdmin
-      }
+        isAdmin: user.isAdmin,
+      },
     });
   } catch (error) {
     console.error('Login error:', error);
@@ -219,7 +225,7 @@ app.get('/api/profile', async (req, res) => {
       city: user.city || '',
       exactLocation: user.exactLocation || '',
       isAdmin: user.isAdmin,
-      createdAt: user.createdAt
+      createdAt: user.createdAt,
     });
   } catch (error) {
     console.error('Profile fetch error:', error);
@@ -228,7 +234,7 @@ app.get('/api/profile', async (req, res) => {
 });
 
 // Update user profile endpoint
-app.put('/api/profile', upload.single('profilePicture'), async (req, res) => {
+app.put('/api/profile', upload.single('profilePicture'), sanitizeUserInput, async (req, res) => {
   const token = req.headers.authorization?.split(' ')[1];
 
   if (!token) {
@@ -237,14 +243,14 @@ app.put('/api/profile', upload.single('profilePicture'), async (req, res) => {
 
   const {
     name, email, phone, gender, dateOfBirth, organization,
-    skills, bio, country, city, exactLocation
+    skills, bio, country, city, exactLocation,
   } = req.body;
 
   // Validate required fields - for updates, keep existing values if not provided
-  if (!name && !user.name) {
+  if (!name && !req.user?.name) {
     return res.status(400).json({ error: 'Name is required' });
   }
-  if (!email && !user.email) {
+  if (!email && !req.user?.email) {
     return res.status(400).json({ error: 'Email is required' });
   }
 
@@ -302,8 +308,8 @@ app.put('/api/profile', upload.single('profilePicture'), async (req, res) => {
         country: user.country,
         city: user.city,
         exactLocation: user.exactLocation,
-        createdAt: user.createdAt
-      }
+        createdAt: user.createdAt,
+      },
     });
   } catch (error) {
     console.error('Profile update error:', error);
@@ -354,7 +360,7 @@ app.post('/api/admin/bootstrap/:userId', async (req, res) => {
 });
 
 // Submit offer endpoint
-app.post('/api/offer', async (req, res) => {
+app.post('/api/offer', sanitizeOfferInput, async (req, res) => {
   const {
     category,
     donorName,
@@ -370,7 +376,7 @@ app.post('/api/offer', async (req, res) => {
     timeCommitment,
     method,
     experience,
-    projectId // Optional: link donation to a specific project
+    projectId, // Optional: link donation to a specific project
   } = req.body;
 
   // Validate required fields
@@ -429,7 +435,7 @@ app.post('/api/offer', async (req, res) => {
             contributionType: 'donor',
             donationCategory: category,
             quantity: quantity ? parseInt(quantity) : null,
-            notes: description || `${category} donation`
+            notes: description || `${category} donation`,
           });
           await contributor.save();
         } catch (error) {
@@ -457,7 +463,7 @@ app.get('/api/admin/stats', requireAdmin, async (req, res) => {
     const totalDonations = await Donation.countDocuments();
     const totalDonatedResult = await Donation.aggregate([
       { $match: { status: 'completed' } },
-      { $group: { _id: null, total: { $sum: '$amount' } } }
+      { $group: { _id: null, total: { $sum: '$amount' } } },
     ]);
     const totalDonated = totalDonatedResult.length > 0 ? totalDonatedResult[0].total : 0;
 
@@ -468,7 +474,7 @@ app.get('/api/admin/stats', requireAdmin, async (req, res) => {
       totalProjects,
       pendingProjects,
       totalDonations,
-      totalDonated
+      totalDonated,
     });
   } catch (error) {
     console.error('Admin stats error:', error);
@@ -487,8 +493,8 @@ app.get('/api/admin/users', requireAdmin, async (req, res) => {
       query = {
         $or: [
           { name: { $regex: search, $options: 'i' } },
-          { email: { $regex: search, $options: 'i' } }
-        ]
+          { email: { $regex: search, $options: 'i' } },
+        ],
       };
     }
 
@@ -504,7 +510,7 @@ app.get('/api/admin/users', requireAdmin, async (req, res) => {
       users,
       total,
       page: parseInt(page),
-      pages: Math.ceil(total / limit)
+      pages: Math.ceil(total / limit),
     });
   } catch (error) {
     console.error('Admin users fetch error:', error);
@@ -524,7 +530,7 @@ app.put('/api/admin/users/:id', requireAdmin, async (req, res) => {
     const user = await User.findByIdAndUpdate(
       id,
       updateData,
-      { new: true }
+      { new: true },
     ).select('name email isAdmin isDisabled');
 
     if (!user) {
@@ -597,7 +603,7 @@ app.put('/api/admin/settings', requireAdmin, async (req, res) => {
       siteName,
       contactEmail,
       maxProjectsPerUser,
-      allowUserRegistration
+      allowUserRegistration,
     } = req.body;
 
     let settings = await Settings.findOne();
@@ -645,7 +651,7 @@ app.get('/api/admin/offers', requireAdmin, async (req, res) => {
       offers,
       total,
       page: parseInt(page),
-      pages: Math.ceil(total / limit)
+      pages: Math.ceil(total / limit),
     });
   } catch (error) {
     console.error('Admin offers fetch error:', error);
@@ -665,7 +671,7 @@ app.put('/api/admin/offers/:id', requireAdmin, async (req, res) => {
     const offer = await Offer.findByIdAndUpdate(
       id,
       { status },
-      { new: true }
+      { new: true },
     );
 
     if (!offer) {
@@ -691,7 +697,7 @@ app.put('/api/admin/donations/:id/status', requireAdmin, async (req, res) => {
     const donation = await Donation.findByIdAndUpdate(
       id,
       { status },
-      { new: true }
+      { new: true },
     );
 
     if (!donation) {
@@ -778,10 +784,10 @@ app.get('/api/admin/projects', requireAdmin, async (req, res) => {
           id: project.createdBy._id,
           name: project.createdBy.name,
           email: project.createdBy.email,
-          phone: project.createdBy.phone
-        } : null
+          phone: project.createdBy.phone,
+        } : null,
       })),
-      total
+      total,
     });
   } catch (error) {
     console.error('Admin projects fetch error:', error);
@@ -801,7 +807,7 @@ app.put('/api/admin/projects/:id/status', requireAdmin, async (req, res) => {
     const project = await Project.findByIdAndUpdate(
       id,
       { status },
-      { new: true }
+      { new: true },
     ).populate('createdBy', 'name email');
 
     if (!project) {
@@ -816,9 +822,9 @@ app.put('/api/admin/projects/:id/status', requireAdmin, async (req, res) => {
         status: project.status,
         createdBy: {
           name: project.createdBy.name,
-          email: project.createdBy.email
-        }
-      }
+          email: project.createdBy.email,
+        },
+      },
     });
   } catch (error) {
     console.error('Admin project status update error:', error);
@@ -844,7 +850,7 @@ app.delete('/api/admin/projects/:id', requireAdmin, async (req, res) => {
 });
 
 // Submit project/event endpoint
-app.post('/api/projects', upload.single('projectImage'), validateProjectCreation, async (req, res) => {
+app.post('/api/projects', upload.single('projectImage'), sanitizeProjectInput, validateProjectCreation, async (req, res) => {
   const token = req.headers.authorization?.split(' ')[1];
 
   if (!token) {
@@ -865,7 +871,7 @@ app.post('/api/projects', upload.single('projectImage'), validateProjectCreation
     briefInfo,
     peopleRequired,
     resourcesRequired,
-    otherInfo
+    otherInfo,
   } = req.body;
 
   try {
@@ -899,7 +905,7 @@ app.post('/api/projects', upload.single('projectImage'), validateProjectCreation
       resourcesRequired,
       otherInfo,
       projectImage,
-      createdBy: user._id
+      createdBy: user._id,
     });
 
     await project.save();
@@ -925,8 +931,8 @@ app.post('/api/projects', upload.single('projectImage'), validateProjectCreation
         otherInfo: project.otherInfo,
         projectImage: project.projectImage,
         status: project.status,
-        createdAt: project.createdAt
-      }
+        createdAt: project.createdAt,
+      },
     });
   } catch (error) {
     console.error('Project creation error:', error);
@@ -986,9 +992,9 @@ app.get('/api/projects', async (req, res) => {
             id: participant.user._id,
             name: participant.user.name,
             email: participant.user.email,
-            phone: participant.user.phone
+            phone: participant.user.phone,
           },
-          joinedAt: participant.createdAt
+          joinedAt: participant.createdAt,
         })) || [],
         resourcesPromised: project.resourcesPromised?.map(resource => ({
           id: resource._id,
@@ -996,16 +1002,16 @@ app.get('/api/projects', async (req, res) => {
             id: resource.user._id,
             name: resource.user.name,
             email: resource.user.email,
-            phone: resource.user.phone
+            phone: resource.user.phone,
           },
           resourceType: resource.resourceType,
           quantity: resource.quantity,
           deliveryDate: resource.deliveryDate,
           status: resource.status,
           resourcesDelivered: resource.resourcesDelivered,
-          notes: resource.notes
-        })) || []
-      }))
+          notes: resource.notes,
+        })) || [],
+      })),
     });
   } catch (error) {
     console.error('Projects fetch error:', error);
@@ -1045,7 +1051,7 @@ app.get('/api/projects/public', async (req, res) => {
       // Authenticated user sees active projects + their own pending/completed projects
       query.$or = [
         { status: 'active' },
-        { createdBy: user._id, status: { $in: ['pending', 'completed'] } }
+        { createdBy: user._id, status: { $in: ['pending', 'completed'] } },
       ];
     } else {
       // Unauthenticated users see only active projects
@@ -1084,13 +1090,13 @@ app.get('/api/projects/public', async (req, res) => {
         createdBy: {
           id: project.createdBy._id,
           name: project.createdBy.name,
-          organization: project.createdBy.organization
-        }
+          organization: project.createdBy.organization,
+        },
         // participantsAttending and resourcesPromised are not included in public view
       })),
       total,
       page: parseInt(page),
-      pages: Math.ceil(total / limit)
+      pages: Math.ceil(total / limit),
     });
   } catch (error) {
     console.error('Public projects fetch error:', error);
@@ -1137,8 +1143,8 @@ app.put('/api/projects/:id/status', async (req, res) => {
       message: 'Project status updated successfully',
       project: {
         id: project._id,
-        status: project.status
-      }
+        status: project.status,
+      },
     });
   } catch (error) {
     console.error('Project status update error:', error);
@@ -1183,7 +1189,7 @@ app.post('/api/projects/:id/join', async (req, res) => {
     // Add participant
     project.participants.push({
       user: decoded.userId,
-      joinedAt: new Date()
+      joinedAt: new Date(),
     });
 
     // Decrease slots remaining
@@ -1195,7 +1201,7 @@ app.post('/api/projects/:id/join', async (req, res) => {
     const contributor = new Contributor({
       user: decoded.userId,
       project: id,
-      contributionType: 'participant'
+      contributionType: 'participant',
     });
     await contributor.save();
 
@@ -1204,8 +1210,8 @@ app.post('/api/projects/:id/join', async (req, res) => {
       project: {
         id: project._id,
         participantsCount: project.participants.length,
-        slotsRemaining: project.slotsRemaining
-      }
+        slotsRemaining: project.slotsRemaining,
+      },
     });
   } catch (error) {
     console.error('Join project error:', error);
@@ -1243,7 +1249,7 @@ app.post('/api/projects/:id/resources', async (req, res) => {
       quantity: parseInt(quantity),
       deliveryDate: new Date(deliveryDate),
       status: 'pending',
-      offeredAt: new Date()
+      offeredAt: new Date(),
     });
 
     await project.save();
@@ -1255,7 +1261,7 @@ app.post('/api/projects/:id/resources', async (req, res) => {
       contributionType: 'resource_provider',
       resourceType,
       quantity: parseInt(quantity),
-      deliveryDate: new Date(deliveryDate)
+      deliveryDate: new Date(deliveryDate),
     });
     await contributor.save();
 
@@ -1266,8 +1272,8 @@ app.post('/api/projects/:id/resources', async (req, res) => {
         resourceType,
         quantity,
         deliveryDate,
-        status: 'pending'
-      }
+        status: 'pending',
+      },
     });
   } catch (error) {
     console.error('Offer resources error:', error);
@@ -1300,17 +1306,17 @@ app.get('/api/contributors', requireAdmin, async (req, res) => {
         id: contributor._id,
         user: contributor.user
           ? {
-              id: contributor.user._id,
-              name: contributor.user.name,
-              email: contributor.user.email
-            }
+            id: contributor.user._id,
+            name: contributor.user.name,
+            email: contributor.user.email,
+          }
           : null,
         project: contributor.project
           ? {
-              id: contributor.project._id,
-              title: contributor.project.title,
-              type: contributor.project.type
-            }
+            id: contributor.project._id,
+            title: contributor.project.title,
+            type: contributor.project.type,
+          }
           : null,
         contributionType: contributor.contributionType,
         resourceType: contributor.resourceType,
@@ -1319,11 +1325,11 @@ app.get('/api/contributors', requireAdmin, async (req, res) => {
         donationCategory: contributor.donationCategory,
         status: contributor.status,
         notes: contributor.notes,
-        createdAt: contributor.createdAt
+        createdAt: contributor.createdAt,
       })),
       total,
       page: parseInt(page),
-      pages: Math.ceil(total / limit)
+      pages: Math.ceil(total / limit),
     });
   } catch (error) {
     console.error('Contributors fetch error:', error);
@@ -1354,7 +1360,7 @@ app.get('/api/contributions', async (req, res) => {
           type: contributor.project.type,
           startDate: contributor.project.startDate,
           endDate: contributor.project.endDate,
-          status: contributor.project.status
+          status: contributor.project.status,
         },
         contributionType: contributor.contributionType,
         resourceType: contributor.resourceType,
@@ -1363,8 +1369,8 @@ app.get('/api/contributions', async (req, res) => {
         donationCategory: contributor.donationCategory,
         status: contributor.status,
         notes: contributor.notes,
-        createdAt: contributor.createdAt
-      }))
+        createdAt: contributor.createdAt,
+      })),
     });
   } catch (error) {
     console.error('Contributions fetch error:', error);
@@ -1460,7 +1466,7 @@ app.put('/api/admin/contributors/:id/status', requireAdmin, async (req, res) => 
     const contributor = await Contributor.findByIdAndUpdate(
       id,
       { status },
-      { new: true }
+      { new: true },
     ).populate('user', 'name email').populate('project', 'title type');
 
     if (!contributor) {
@@ -1563,7 +1569,7 @@ app.get('/api/admin/donations', requireAdmin, async (req, res) => {
       donations,
       total,
       page: parseInt(page),
-      pages: Math.ceil(total / limit)
+      pages: Math.ceil(total / limit),
     });
   } catch (error) {
     console.error('Admin donations fetch error:', error);
@@ -1577,14 +1583,14 @@ app.get('/api/donations/stats', async (req, res) => {
     // Calculate total donated (sum of completed donations)
     const totalDonatedResult = await Donation.aggregate([
       { $match: { status: 'completed' } },
-      { $group: { _id: null, total: { $sum: '$amount' } } }
+      { $group: { _id: null, total: { $sum: '$amount' } } },
     ]);
     const totalDonated = totalDonatedResult.length > 0 ? totalDonatedResult[0].total : 0;
 
     // Calculate donors count (unique non-anonymous donors with completed donations)
     const donorsCount = await Donation.distinct('email', {
       status: 'completed',
-      anonymous: false
+      anonymous: false,
     }).then(emails => emails.length);
 
     // Calculate highest and lowest donation amounts
@@ -1602,7 +1608,7 @@ app.get('/api/donations/stats', async (req, res) => {
       totalDonated,
       donorsCount,
       highestDonation,
-      lowestDonation
+      lowestDonation,
     });
   } catch (error) {
     console.error('Donation stats fetch error:', error);
@@ -1646,7 +1652,7 @@ app.get('/api/donations/recent', async (req, res) => {
         donorName: donation.anonymous ? 'Anonymous Donor' : (donation.name || 'Anonymous Donor'),
         amount: `Ksh ${donation.amount.toLocaleString()}`,
         purpose: 'Donation to SDGConnect',
-        date: relativeTime
+        date: relativeTime,
       };
     });
 
@@ -1675,15 +1681,15 @@ app.get('/api/projects/:id', async (req, res) => {
         path: 'participantsAttending',
         populate: {
           path: 'user',
-          select: 'name email phone'
-        }
+          select: 'name email phone',
+        },
       })
       .populate({
         path: 'resourcesPromised',
         populate: {
           path: 'user',
-          select: 'name email phone'
-        }
+          select: 'name email phone',
+        },
       });
 
     if (!project) {
@@ -1720,7 +1726,7 @@ app.get('/api/projects/:id', async (req, res) => {
         createdBy: {
           id: project.createdBy._id,
           name: project.createdBy.name,
-          organization: project.createdBy.organization
+          organization: project.createdBy.organization,
         },
         participantsAttending: project.participantsAttending?.map(participant => ({
           _id: participant._id,
@@ -1728,10 +1734,10 @@ app.get('/api/projects/:id', async (req, res) => {
             id: participant.user._id,
             name: participant.user.name,
             email: participant.user.email,
-            phone: participant.user.phone
+            phone: participant.user.phone,
           },
           attended: participant.attended,
-          joinedAt: participant.createdAt
+          joinedAt: participant.createdAt,
         })) || [],
         resourcesPromised: project.resourcesPromised?.map(resource => ({
           _id: resource._id,
@@ -1739,7 +1745,7 @@ app.get('/api/projects/:id', async (req, res) => {
             id: resource.user._id,
             name: resource.user.name,
             email: resource.user.email,
-            phone: resource.user.phone
+            phone: resource.user.phone,
           },
           resourceType: resource.resourceType,
           quantity: resource.quantity,
@@ -1747,9 +1753,9 @@ app.get('/api/projects/:id', async (req, res) => {
           status: resource.status,
           resourcesDelivered: resource.resourcesDelivered,
           notes: resource.notes,
-          offeredAt: resource.createdAt
-        })) || []
-      }
+          offeredAt: resource.createdAt,
+        })) || [],
+      },
     });
   } catch (error) {
     console.error('Project fetch error:', error);
@@ -1770,7 +1776,7 @@ async function getMpesaAccessToken() {
         headers: {
           Authorization: `Basic ${auth}`,
         },
-      }
+      },
     );
     return response.data.access_token;
   } catch (error) {
@@ -1780,7 +1786,7 @@ async function getMpesaAccessToken() {
 }
 
 // M-Pesa STK Push initiation
-app.post('/api/donations/initiate-stk-push', async (req, res) => {
+app.post('/api/donations/initiate-stk-push', sensitiveLimiter, sanitizeDonationInput, async (req, res) => {
   const { amount, name, email, phone, anonymous } = req.body;
 
   // Validate required fields
@@ -1814,7 +1820,7 @@ app.post('/api/donations/initiate-stk-push', async (req, res) => {
 
     // Generate password
     const password = Buffer.from(
-      `${process.env.MPESA_BUSINESS_SHORTCODE}${process.env.MPESA_PASSKEY}${timestamp}`
+      `${process.env.MPESA_BUSINESS_SHORTCODE}${process.env.MPESA_PASSKEY}${timestamp}`,
     ).toString('base64');
 
     // Prepare STK Push request
@@ -1842,7 +1848,7 @@ app.post('/api/donations/initiate-stk-push', async (req, res) => {
           Authorization: `Bearer ${accessToken}`,
           'Content-Type': 'application/json',
         },
-      }
+      },
     );
 
     // Get user ID if authenticated
@@ -1876,7 +1882,7 @@ app.post('/api/donations/initiate-stk-push', async (req, res) => {
       id: pendingDonation._id,
       checkoutRequestId: response.data.CheckoutRequestID,
       amount: amount,
-      email: email
+      email: email,
     });
 
     res.json({
@@ -1889,7 +1895,7 @@ app.post('/api/donations/initiate-stk-push', async (req, res) => {
     console.error('M-Pesa STK Push error:', error.response?.data || error.message);
     res.status(500).json({
       error: 'Failed to initiate payment',
-      details: error.response?.data?.errorMessage || error.message
+      details: error.response?.data?.errorMessage || error.message,
     });
   }
 });
@@ -1915,7 +1921,7 @@ app.post('/api/donations/mpesa-callback', async (req, res) => {
         // Find the pending donation record
         const pendingDonation = await Donation.findOne({
           checkoutRequestId: checkoutRequestId,
-          status: 'pending'
+          status: 'pending',
         });
 
         if (pendingDonation) {
@@ -1928,7 +1934,7 @@ app.post('/api/donations/mpesa-callback', async (req, res) => {
           console.log('Transaction details:', {
             transactionId,
             transactionDate,
-            phoneNumber
+            phoneNumber,
           });
 
           // Update the donation record with transaction details
@@ -1943,7 +1949,7 @@ app.post('/api/donations/mpesa-callback', async (req, res) => {
             name: pendingDonation.name,
             email: pendingDonation.email,
             amount: pendingDonation.amount,
-            transactionId: transactionId
+            transactionId: transactionId,
           });
 
           // Send confirmation email
@@ -1966,7 +1972,7 @@ app.post('/api/donations/mpesa-callback', async (req, res) => {
               <p>If you have any questions, please don't hesitate to contact us.</p>
               <br>
               <p>Best regards,<br>SDGConnect Foundation Team</p>
-            `
+            `,
           };
 
           try {
@@ -1986,7 +1992,7 @@ app.post('/api/donations/mpesa-callback', async (req, res) => {
         const failedDonation = await Donation.findOneAndUpdate(
           { checkoutRequestId: checkoutRequestId, status: 'pending' },
           { status: 'failed' },
-          { new: true }
+          { new: true },
         );
 
         if (failedDonation) {
@@ -2027,32 +2033,32 @@ app.get('/api/user/impact', async (req, res) => {
     // Get completed projects count
     const completedProjects = await Project.countDocuments({
       createdBy: userId,
-      status: 'completed'
+      status: 'completed',
     });
 
     // Get completed donations count (by email to include donations made when not logged in)
     const completedDonations = await Donation.countDocuments({
       email: user.email,
-      status: 'completed'
+      status: 'completed',
     });
 
     // Get approved offers count
     const approvedOffers = await Offer.countDocuments({
       user: userId,
-      status: 'approved'
+      status: 'approved',
     });
 
     // Get attended contributions count
     const attendedContributions = await Contributor.countDocuments({
       user: userId,
-      attended: 'yes'
+      attended: 'yes',
     });
 
     res.json({
       completedProjects,
       completedDonations,
       approvedOffers,
-      attendedContributions
+      attendedContributions,
     });
   } catch (error) {
     console.error('Impact dashboard fetch error:', error);
@@ -2068,7 +2074,7 @@ app.get('/health', (req, res) => {
   res.status(200).json({
     status: 'OK',
     timestamp: new Date().toISOString(),
-    uptime: process.uptime()
+    uptime: process.uptime(),
   });
 });
 

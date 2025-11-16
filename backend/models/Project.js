@@ -4,125 +4,125 @@ const projectSchema = new mongoose.Schema({
   type: {
     type: String,
     required: true,
-    enum: ['project', 'event']
+    enum: ['project', 'event'],
   },
   title: {
     type: String,
     required: true,
-    trim: true
+    trim: true,
   },
   sdgs: [{
     type: String,
-    trim: true
+    trim: true,
   }],
   startDate: {
     type: Date,
-    required: true
+    required: true,
   },
   endDate: {
-    type: Date
+    type: Date,
   },
   country: {
     type: String,
-    trim: true
+    trim: true,
   },
   city: {
     type: String,
-    trim: true
+    trim: true,
   },
   exactLocation: {
     type: String,
-    trim: true
+    trim: true,
   },
   sponsors: {
     type: String,
-    trim: true
+    trim: true,
   },
   organizers: {
     type: String,
-    trim: true
+    trim: true,
   },
   briefInfo: {
     type: String,
     required: true,
-    trim: true
+    trim: true,
   },
   peopleRequired: {
     type: Number,
-    min: 0
+    min: 0,
   },
   slotsRemaining: {
     type: Number,
     min: 0,
     default: function() {
       return this.peopleRequired || 0;
-    }
+    },
   },
   resourcesRequired: {
     type: String,
-    trim: true
+    trim: true,
   },
   otherInfo: {
     type: String,
-    trim: true
+    trim: true,
   },
   projectImage: {
     type: String, // URL or path to image
-    trim: true
+    trim: true,
   },
   createdBy: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
-    required: true
+    required: true,
   },
   participants: [{
     user: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User',
-      required: true
+      required: true,
     },
     joinedAt: {
       type: Date,
-      default: Date.now
-    }
+      default: Date.now,
+    },
   }],
   resources: [{
     offeredBy: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User',
-      required: true
+      required: true,
     },
     resourceType: {
       type: String,
       required: true,
-      trim: true
+      trim: true,
     },
     quantity: {
       type: Number,
       required: true,
-      min: 1
+      min: 1,
     },
     deliveryDate: {
       type: Date,
-      required: true
+      required: true,
     },
     status: {
       type: String,
       enum: ['pending', 'confirmed', 'delivered'],
-      default: 'pending'
+      default: 'pending',
     },
     offeredAt: {
       type: Date,
-      default: Date.now
-    }
+      default: Date.now,
+    },
   }],
   status: {
     type: String,
     enum: ['pending', 'active', 'completed', 'cancelled', 'rejected'],
-    default: 'pending'
-  }
+    default: 'pending',
+  },
 }, {
-  timestamps: true
+  timestamps: true,
 });
 
 // Virtual for all participants (from Contributor table)
@@ -134,9 +134,9 @@ projectSchema.virtual('participantsAttending', {
   options: {
     populate: {
       path: 'user',
-      select: 'name email phone'
-    }
-  }
+      select: 'name email phone',
+    },
+  },
 });
 
 // Virtual for all resource providers (from Contributor table)
@@ -148,9 +148,9 @@ projectSchema.virtual('resourcesPromised', {
   options: {
     populate: {
       path: 'user',
-      select: 'name email phone'
-    }
-  }
+      select: 'name email phone',
+    },
+  },
 });
 
 // Include virtuals in JSON output

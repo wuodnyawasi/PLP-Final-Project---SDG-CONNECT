@@ -19,7 +19,7 @@ const validateRegistration = (req, res, next) => {
     return res.status(400).json({
       success: false,
       error: 'Validation failed',
-      details: errors
+      details: errors,
     });
   }
 
@@ -43,7 +43,7 @@ const validateLogin = (req, res, next) => {
     return res.status(400).json({
       success: false,
       error: 'Validation failed',
-      details: errors
+      details: errors,
     });
   }
 
@@ -79,7 +79,7 @@ const validateProjectCreation = (req, res, next) => {
     return res.status(400).json({
       success: false,
       error: 'Validation failed',
-      details: errors
+      details: errors,
     });
   }
 
@@ -89,5 +89,5 @@ const validateProjectCreation = (req, res, next) => {
 module.exports = {
   validateRegistration,
   validateLogin,
-  validateProjectCreation
+  validateProjectCreation,
 };

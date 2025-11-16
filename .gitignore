@@ -132,3 +132,39 @@ Desktop.ini
 
 # Backend specific
 backend/uploads/
+
+# Additional entries for completeness:
+
+# Test coverage reports
+coverage/
+*.lcov
+
+# IDE and editor files
+.vscode/settings.json
+.idea/
+
+# Temporary files
+*.tmp
+*.temp
+
+# Local development files
+.env.local
+.env.development
+.env.production
+
+# Build artifacts
+frontend/dist/
+backend/dist/
+
+# Log files
+logs/
+*.log
+
+# Database files
+*.sqlite
+*.db
+*.sqlite3
+
+# OS generated files
+.DS_Store
+Thumbs.db
