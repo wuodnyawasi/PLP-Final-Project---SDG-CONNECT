@@ -22,6 +22,7 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 
 // Trust proxy disabled; rate limiting uses custom keyGenerator to handle proxies
+app.set('trust proxy', 1);
 app.set('trust proxy', false);
 
 // Middleware
