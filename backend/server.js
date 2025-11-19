@@ -2075,15 +2075,53 @@ app.use(errorHandler);
 
 // Root endpoint
 app.get('/', (req, res) => {
-  res.json({
-    message: 'Welcome to SDG Connect API',
-    version: '1.0.0',
-    status: 'running',
-    endpoints: {
-      health: '/health',
-      api: '/api/*'
-    }
-  });
+  res.send(`
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>SDG Connect</title>
+      <style>
+        body {
+          font-family: Arial, sans-serif;
+          text-align: center;
+          padding: 50px;
+          background-color: #f5f5f5;
+        }
+        .container {
+          max-width: 600px;
+          margin: 0 auto;
+          background: white;
+          padding: 40px;
+          border-radius: 10px;
+          box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+          color: #2c3e50;
+          margin-bottom: 20px;
+        }
+        p {
+          color: #7f8c8d;
+          font-size: 18px;
+          line-height: 1.6;
+        }
+        .status {
+          color: #27ae60;
+          font-weight: bold;
+        }
+      </style>
+    </head>
+    <body>
+      <div class="container">
+        <h1>Welcome to SDG Connect</h1>
+        <p class="status">API Status: Running</p>
+        <p>Connecting communities for sustainable development goals.</p>
+        <p>Version 1.0.0</p>
+      </div>
+    </body>
+    </html>
+  `);
 });
 
 // Health check endpoint
