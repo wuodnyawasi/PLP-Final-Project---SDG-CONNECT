@@ -50,7 +50,7 @@ const Donate = () => {
         const fetchDonationStats = async () => {
             try {
                 console.log('Fetching donation stats...');
-                const response = await fetch('http://localhost:5000/api/donations/stats');
+                const response = await fetch(`${import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000'}/api/donations/stats`);
                 if (response.ok) {
                     const data = await response.json();
                     console.log('Donation stats fetched:', data);
@@ -85,7 +85,7 @@ const Donate = () => {
         const fetchRecentDonations = async () => {
             try {
                 console.log('Fetching recent donations...');
-                const response = await fetch('http://localhost:5000/api/donations/recent');
+                const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/donations/recent`);
                 if (response.ok) {
                     const data = await response.json();
                     console.log('Recent donations fetched:', data);
@@ -126,7 +126,7 @@ const Donate = () => {
 
         try {
             // Initiate M-Pesa STK Push
-            const response = await fetch('http://localhost:5000/api/donations/initiate-stk-push', {
+            const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/donations/initiate-stk-push`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(formData)

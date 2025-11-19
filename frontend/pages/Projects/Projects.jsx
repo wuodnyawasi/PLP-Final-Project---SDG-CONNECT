@@ -82,7 +82,7 @@ const ProjectListing = () => {
             const userData = JSON.parse(user);
             if (project.createdBy?.id === userData.id || userData.isAdmin) {
                 try {
-                    const response = await fetch(`http://localhost:5000/api/projects/${project.id}`, {
+                    const response = await fetch(`${import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000'}/api/projects/${project.id}`, {
                         headers: {
                             'Authorization': `Bearer ${token}`,
                         },

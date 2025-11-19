@@ -74,7 +74,7 @@ const upload = multer({
 });
 
 // Connect to MongoDB
-mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/sdg_connect', {
+mongoose.connect(process.env.MONGODB_URI || 'mongodb+srv://your-mongodb-connection-string', {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 })

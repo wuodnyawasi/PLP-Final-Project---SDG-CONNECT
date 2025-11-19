@@ -35,7 +35,7 @@ const UserProfile = () => {
             }
 
             try {
-                const response = await fetch('http://localhost:5000/api/profile', {
+                const response = await fetch(`${import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000'}/api/profile`, {
                     headers: {
                         'Authorization': `Bearer ${token}`,
                         'Content-Type': 'application/json',
