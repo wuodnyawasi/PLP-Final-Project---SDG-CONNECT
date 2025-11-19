@@ -168,3 +168,6 @@ logs/
 # OS generated files
 .DS_Store
 Thumbs.db
+
+TODO.md
+.env.example
