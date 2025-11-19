@@ -1,4 +1,5 @@
 const rateLimit = require('express-rate-limit');
+const { ipKeyGenerator } = rateLimit;
 
 // General API rate limiter
 const apiLimiter = rateLimit({
@@ -21,7 +22,7 @@ const authLimiter = rateLimit({
   },
   standardHeaders: true,
   legacyHeaders: false,
-  keyGenerator: (req) => req.headers['x-forwarded-for']?.split(',')[0]?.trim() || req.connection.remoteAddress || req.ip, // Extract real client IP from X-Forwarded-For header
+  keyGenerator: ipKeyGenerator, // Use the built-in helper for proper IP handling including IPv6
 });
 
 // Limiter for sensitive operations
