@@ -2073,6 +2073,19 @@ app.get('/api/user/impact', async (req, res) => {
 // Error handling middleware (must be last)
 app.use(errorHandler);
 
+// Root endpoint
+app.get('/', (req, res) => {
+  res.json({
+    message: 'Welcome to SDG Connect API',
+    version: '1.0.0',
+    status: 'running',
+    endpoints: {
+      health: '/health',
+      api: '/api/*'
+    }
+  });
+});
+
 // Health check endpoint
 app.get('/health', (req, res) => {
   res.status(200).json({
