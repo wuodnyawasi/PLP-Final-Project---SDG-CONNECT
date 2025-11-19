@@ -1,5 +1,4 @@
 const rateLimit = require('express-rate-limit');
-const { ipKeyGenerator } = rateLimit;
 
 // General API rate limiter
 const apiLimiter = rateLimit({
@@ -10,7 +9,6 @@ const apiLimiter = rateLimit({
   },
   standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
   legacyHeaders: false, // Disable the `X-RateLimit-*` headers
-  keyGenerator: (req) => req.connection.remoteAddress || req.ip, // Use direct IP to avoid proxy header issues
 });
 
 // Stricter limiter for authentication endpoints
@@ -22,7 +20,6 @@ const authLimiter = rateLimit({
   },
   standardHeaders: true,
   legacyHeaders: false,
-  keyGenerator: ipKeyGenerator, // Use the built-in helper for proper IP handling including IPv6
 });
 
 // Limiter for sensitive operations
@@ -34,7 +31,6 @@ const sensitiveLimiter = rateLimit({
   },
   standardHeaders: true,
   legacyHeaders: false,
-  keyGenerator: (req) => req.connection.remoteAddress || req.ip, // Use direct IP to avoid proxy header issues
 });
 
 module.exports = {
