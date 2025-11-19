@@ -21,8 +21,8 @@ require('dotenv').config();
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-// Trust proxy for accurate IP detection behind reverse proxies (e.g., Render)
-app.set('trust proxy', true);
+// Trust proxy disabled; rate limiting uses custom keyGenerator to handle proxies
+app.set('trust proxy', false);
 
 // Middleware
 app.use(cors({
