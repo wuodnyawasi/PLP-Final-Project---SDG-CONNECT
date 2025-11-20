@@ -15,7 +15,7 @@ const JoinProjectModal = ({ isOpen, onClose, project, onJoinSuccess }) => {
 
         try {
             const token = localStorage.getItem('token');
-            const response = await fetch(`http://localhost:5000/api/projects/${project.id}/join`, {
+            const response = await fetch(`https://plp-final-project-sdg-connect.onrender.com/api/projects/${project.id}/join`, {
                 method: 'POST',
                 headers: {
                     'Authorization': `Bearer ${token}`,

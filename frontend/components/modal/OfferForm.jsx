@@ -252,7 +252,7 @@ const OfferForm = () => {
                 ...formData
             };
 
-            const response = await fetch('http://localhost:5000/api/offer', {
+            const response = await fetch('https://plp-final-project-sdg-connect.onrender.com/api/offer', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

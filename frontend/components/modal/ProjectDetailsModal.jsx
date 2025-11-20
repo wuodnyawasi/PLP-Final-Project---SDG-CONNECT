@@ -54,8 +54,8 @@ const ProjectDetailsModal = ({ isOpen, onClose, project, onProjectUpdate }) => {
         try {
             const token = localStorage.getItem('token');
             const promises = selectedParticipants.map(id =>
-                fetch(`http://localhost:5000/api/contributors/${id}/attend`, {
-                    method: 'PUT',
+                fetch(`${import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000'}/api/contributors/${id}/attend`, {
+                     method: 'PUT',
                     headers: {
                         'Authorization': `Bearer ${token}`,
                         'Content-Type': 'application/json',
@@ -80,7 +80,7 @@ const ProjectDetailsModal = ({ isOpen, onClose, project, onProjectUpdate }) => {
         try {
             const token = localStorage.getItem('token');
             if (token && currentProject.id) {
-            const response = await fetch(`http://localhost:5000/api/projects/${currentProject.id}?t=${Date.now()}`, {
+            const response = await fetch(`${import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000'}/api/projects/${currentProject.id}?t=${Date.now()}`, {
                 headers: {
                     'Authorization': `Bearer ${token}`,
                 },
@@ -107,7 +107,7 @@ const ProjectDetailsModal = ({ isOpen, onClose, project, onProjectUpdate }) => {
         try {
             const token = localStorage.getItem('token');
             const promises = selectedResources.map(id =>
-                fetch(`http://localhost:5000/api/contributors/${id}/deliver`, {
+                fetch(`${import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000'}/api/contributors/${id}/deliver`, {
                     method: 'PUT',
                     headers: {
                         'Authorization': `Bearer ${token}`,
@@ -155,9 +155,14 @@ const ProjectDetailsModal = ({ isOpen, onClose, project, onProjectUpdate }) => {
                     {currentProject.projectImage && (
                         <div className="project-image-large">
                             <img
-                                src={currentProject.projectImage.startsWith('http') ? currentProject.projectImage : `http://localhost:5000${currentProject.projectImage}`}
-                                alt={currentProject.title}
-                            />
+                                    src={
+                                        currentProject.projectImage.startsWith('http')
+                                        ? currentProject.projectImage
+                                        : `${import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000'}${currentProject.projectImage}`
+                                    }
+                                    alt={currentProject.title}
+                                    />
+
                         </div>
                     )}
 
