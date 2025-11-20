@@ -256,10 +256,10 @@ app.put('/api/profile', upload.single('profilePicture'), sanitizeUserInput, asyn
   } = req.body;
 
   // Validate required fields - for updates, keep existing values if not provided
-  if (!name && !req.user?.name) {
+  if (!name && !user.name) {
     return res.status(400).json({ error: 'Name is required' });
   }
-  if (!email && !req.user?.email) {
+  if (!email && !user.email) {
     return res.status(400).json({ error: 'Email is required' });
   }
 
