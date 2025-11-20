@@ -30,6 +30,7 @@ app.use(cors({
   origin: [
     process.env.FRONTEND_URL || 'https://plp-final-project-sdg-connect.onrender.com',
     'https://plp-final-project-sdg-connect.vercel.app',
+    'https://plp-final-project-sdg-connect-kwy26p0mw-michael-saokes-projects.vercel.app',
     'http://localhost:3000' // For local development
   ],
   credentials: true,
