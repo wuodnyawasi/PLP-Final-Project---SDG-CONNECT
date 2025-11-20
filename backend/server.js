@@ -27,7 +27,11 @@ app.set('trust proxy', false);
 
 // Middleware
 app.use(cors({
-  origin: process.env.FRONTEND_URL || 'https://plp-final-project-sdg-connect.onrender.com',
+  origin: [
+    process.env.FRONTEND_URL || 'https://plp-final-project-sdg-connect.onrender.com',
+    'https://plp-final-project-sdg-connect.vercel.app',
+    'http://localhost:3000' // For local development
+  ],
   credentials: true,
 }));
 app.use(express.json());
