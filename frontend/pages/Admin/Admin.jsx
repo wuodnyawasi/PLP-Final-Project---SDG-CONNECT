@@ -204,7 +204,7 @@ const Admin = () => {
   const fetchSettings = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch('http://localhost:5000/api/admin/settings', {
+      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000'}/api/admin/settings`, {
         headers: {
           'Authorization': `Bearer ${token}`
         }
@@ -452,7 +452,7 @@ const Admin = () => {
 
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch(`http://localhost:5000/api/admin/projects/${projectId}`, {
+      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000'}/api/admin/projects/${projectId}`, {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${token}`
@@ -564,7 +564,7 @@ const Admin = () => {
 
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch(`http://localhost:5000/api/admin/offers/${offerId}`, {
+      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000'}/api/admin/offers/${offerId}`, {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${token}`
@@ -614,7 +614,7 @@ const Admin = () => {
   const handleMarkAttended = async (contributorId, attended) => {
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch(`http://localhost:5000/api/admin/contributors/${contributorId}/attend`, {
+      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000'}/api/admin/contributors/${contributorId}/attend`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -724,7 +724,7 @@ const Admin = () => {
   const handleDonationStatusUpdate = async (donationId, newStatus) => {
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch(`http://localhost:5000/api/admin/donations/${donationId}/status`, {
+      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000'}/api/admin/donations/${donationId}/status`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
