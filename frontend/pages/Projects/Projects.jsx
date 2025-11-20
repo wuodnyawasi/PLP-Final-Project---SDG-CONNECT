@@ -33,7 +33,7 @@ const ProjectListing = () => {
     const fetchProjects = async () => {
         setLoading(true);
         try {
-            const response = await fetch(`${import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000'}/api/projects/public`);
+            const response = await fetch(`http://localhost:5000/api/projects/public`);
             if (response.ok) {
                 const data = await response.json();
                 setProjects(data.projects);
@@ -253,7 +253,7 @@ const ProjectListing = () => {
                                 <div className="card-image-wrapper">
                                     {project.projectImage ? (
                                         <img
-                                            src={project.projectImage.startsWith('http') ? project.projectImage : `${import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000'}${project.projectImage}`}
+                                            src={project.projectImage.startsWith('http') ? project.projectImage : `http://localhost:5000${project.projectImage}`}
                                             alt={project.title}
                                             className="card-image"
                                         />
