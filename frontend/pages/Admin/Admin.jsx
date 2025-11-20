@@ -666,7 +666,7 @@ const Admin = () => {
 
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch(`http://localhost:5000/api/admin/contributors/${contributorId}`, {
+      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL || 'https://plp-final-project-sdg-connect.onrender.com'}/api/admin/contributors/${contributorId}`, {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${token}`
@@ -754,7 +754,7 @@ const Admin = () => {
 
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch(`http://localhost:5000/api/admin/donations/${donationId}`, {
+      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL || 'https://plp-final-project-sdg-connect.onrender.com'}/api/admin/donations/${donationId}`, {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${token}`

@@ -52,7 +52,7 @@ const ProvideResourcesModal = ({ isOpen, onClose, project, onResourceOfferSucces
 
         try {
             const token = localStorage.getItem('token');
-            const response = await fetch(`http://localhost:5000/api/projects/${project.id}/resources`, {
+            const response = await fetch(`${import.meta.env.VITE_API_BASE_URL || 'https://plp-final-project-sdg-connect.onrender.com'}/api/projects/${project.id}/resources`, {
                 method: 'POST',
                 headers: {
                     'Authorization': `Bearer ${token}`,
