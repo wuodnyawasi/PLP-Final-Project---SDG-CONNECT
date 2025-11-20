@@ -107,7 +107,7 @@ const Admin = () => {
     setLoading(true);
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch('http://localhost:5000/api/admin/users', {
+      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000'}/api/admin/users`, {
         headers: {
           'Authorization': `Bearer ${token}`
         }
@@ -131,8 +131,8 @@ const Admin = () => {
     try {
       const token = localStorage.getItem('token');
       const url = projectStatusFilter
-        ? `http://localhost:5000/api/admin/projects?status=${projectStatusFilter}`
-        : 'http://localhost:5000/api/admin/projects';
+        ? `${import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000'}/api/admin/projects?status=${projectStatusFilter}`
+        : `${import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000'}/api/admin/projects`;
       const response = await fetch(url, {
         headers: {
           'Authorization': `Bearer ${token}`
@@ -156,7 +156,7 @@ const Admin = () => {
     setLoading(true);
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch('http://localhost:5000/api/contributors', {
+      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000'}/api/contributors`, {
         headers: {
           'Authorization': `Bearer ${token}`
         }
@@ -180,8 +180,8 @@ const Admin = () => {
     try {
       const token = localStorage.getItem('token');
       const url = offerStatusFilter || offerCategoryFilter
-        ? `http://localhost:5000/api/admin/offers?${offerStatusFilter ? `status=${offerStatusFilter}` : ''}${offerCategoryFilter ? `&category=${offerCategoryFilter}` : ''}`
-        : 'http://localhost:5000/api/admin/offers';
+        ? `${import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000'}/api/admin/offers?${offerStatusFilter ? `status=${offerStatusFilter}` : ''}${offerCategoryFilter ? `&category=${offerCategoryFilter}` : ''}`
+        : `${import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000'}/api/admin/offers`;
       const response = await fetch(url, {
         headers: {
           'Authorization': `Bearer ${token}`
@@ -224,7 +224,7 @@ const Admin = () => {
   const saveSettings = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch('http://localhost:5000/api/admin/settings', {
+      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000'}/api/admin/settings`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -348,7 +348,7 @@ const Admin = () => {
 
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch(`http://localhost:5000/api/admin/users/${userId}`, {
+      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000'}/api/admin/users/${userId}`, {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${token}`
@@ -370,7 +370,7 @@ const Admin = () => {
   const handleToggleDisableUser = async (userId, isDisabled) => {
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch(`http://localhost:5000/api/admin/users/${userId}`, {
+      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000'}/api/admin/users/${userId}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -396,7 +396,7 @@ const Admin = () => {
   const handleToggleAdmin = async (userId, isAdmin) => {
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch(`http://localhost:5000/api/admin/users/${userId}`, {
+      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000'}/api/admin/users/${userId}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -422,7 +422,7 @@ const Admin = () => {
   const handleProjectStatusUpdate = async (projectId, newStatus) => {
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch(`http://localhost:5000/api/admin/projects/${projectId}/status`, {
+      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000'}/api/admin/projects/${projectId}/status`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -506,7 +506,7 @@ const Admin = () => {
   const handleApproveOffer = async (offerId) => {
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch(`http://localhost:5000/api/admin/offers/${offerId}`, {
+      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000'}/api/admin/offers/${offerId}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -534,7 +534,7 @@ const Admin = () => {
   const handleRejectOffer = async (offerId) => {
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch(`http://localhost:5000/api/admin/offers/${offerId}`, {
+      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000'}/api/admin/offers/${offerId}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -588,7 +588,7 @@ const Admin = () => {
   const handleContributorStatusUpdate = async (contributorId, newStatus) => {
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch(`http://localhost:5000/api/admin/contributors/${contributorId}/status`, {
+      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000'}/api/admin/contributors/${contributorId}/status`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -640,7 +640,7 @@ const Admin = () => {
   const handleMarkDelivered = async (contributorId) => {
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch(`http://localhost:5000/api/admin/contributors/${contributorId}/deliver`, {
+      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000'}/api/admin/contributors/${contributorId}/deliver`, {
         method: 'PUT',
         headers: {
           'Authorization': `Bearer ${token}`
@@ -690,8 +690,8 @@ const Admin = () => {
     try {
       const token = localStorage.getItem('token');
       const url = donationStatusFilter
-        ? `http://localhost:5000/api/admin/donations?status=${donationStatusFilter}`
-        : 'http://localhost:5000/api/admin/donations';
+        ? `${import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000'}/api/admin/donations?status=${donationStatusFilter}`
+        : `${import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000'}/api/admin/donations`;
       const response = await fetch(url, {
         headers: {
           'Authorization': `Bearer ${token}`
