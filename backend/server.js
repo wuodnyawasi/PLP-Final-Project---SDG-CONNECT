@@ -6,6 +6,7 @@ const jwt = require('jsonwebtoken');
 const multer = require('multer');
 const path = require('path');
 const axios = require('axios');
+const cloudinary = require('cloudinary').v2;
 const User = require('./models/User');
 const Offer = require('./models/Offer');
 const Project = require('./models/Project');
@@ -17,6 +18,13 @@ const { validateRegistration, validateLogin, validateProjectCreation } = require
 const { apiLimiter, authLimiter, sensitiveLimiter } = require('./middleware/rateLimiter');
 const { sanitizeUserInput, sanitizeProjectInput, sanitizeOfferInput, sanitizeDonationInput } = require('./middleware/sanitization');
 require('dotenv').config();
+
+// Configure Cloudinary
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+});
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -46,8 +54,7 @@ app.use((req, res, next) => {
   next();
 });
 
-// Serve static files from uploads directory
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+// Note: Static file serving removed as images are now hosted on Cloudinary
 
 // Configure multer for file uploads
 const storage = multer.diskStorage({
@@ -282,7 +289,27 @@ app.put('/api/profile', upload.single('profilePicture'), sanitizeUserInput, asyn
     // Handle profile picture upload
     let profilePicture = user.profilePicture;
     if (req.file) {
-      profilePicture = `/uploads/${req.file.filename}`;
+      try {
+        // Upload to Cloudinary
+        const result = await new Promise((resolve, reject) => {
+          const uploadStream = cloudinary.uploader.upload_stream(
+            {
+              folder: 'profile-pictures',
+              public_id: `profile-${user._id}-${Date.now()}`,
+              transformation: [{ width: 300, height: 300, crop: 'fill' }],
+            },
+            (error, result) => {
+              if (error) reject(error);
+              else resolve(result);
+            }
+          );
+          uploadStream.end(req.file.buffer);
+        });
+        profilePicture = result.secure_url;
+      } catch (uploadError) {
+        console.error('Cloudinary upload error:', uploadError);
+        return res.status(500).json({ error: 'Failed to upload profile picture' });
+      }
     }
 
     // Update user fields
@@ -894,7 +921,27 @@ app.post('/api/projects', upload.single('projectImage'), sanitizeProjectInput, v
     // Handle project image upload
     let projectImage = '';
     if (req.file) {
-      projectImage = `/uploads/${req.file.filename}`;
+      try {
+        // Upload to Cloudinary
+        const result = await new Promise((resolve, reject) => {
+          const uploadStream = cloudinary.uploader.upload_stream(
+            {
+              folder: 'project-images',
+              public_id: `project-${Date.now()}-${Math.round(Math.random() * 1E9)}`,
+              transformation: [{ width: 800, height: 600, crop: 'fill' }],
+            },
+            (error, result) => {
+              if (error) reject(error);
+              else resolve(result);
+            }
+          );
+          uploadStream.end(req.file.buffer);
+        });
+        projectImage = result.secure_url;
+      } catch (uploadError) {
+        console.error('Cloudinary upload error:', uploadError);
+        return res.status(500).json({ error: 'Failed to upload project image' });
+      }
     }
 
     // Create new project
