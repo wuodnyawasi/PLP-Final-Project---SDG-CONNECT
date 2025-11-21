@@ -125,7 +125,7 @@ const ProjectEventModal = ({ isOpen, onClose }) => {
                     setProjectImagePreview('');
                 }, 1500);
             } else {
-                setMessage(data.error || 'Failed to create project/event');
+                setMessage(data.details ? data.details.join(', ') : data.error || 'Failed to create project/event');
             }
         } catch (err) {
             setMessage('Network error. Please try again.');
@@ -263,7 +263,7 @@ const ProjectEventModal = ({ isOpen, onClose }) => {
                                     name="city"
                                     value={formData.city}
                                     onChange={handleInputChange}
-                                    placeholder="e.g., New York"
+                                    placeholder="e.g., Kisumu, Nairobi, Mombasa"
                                 />
                             </div>
                         </div>
@@ -275,7 +275,7 @@ const ProjectEventModal = ({ isOpen, onClose }) => {
                                 name="exactLocation"
                                 value={formData.exactLocation}
                                 onChange={handleInputChange}
-                                placeholder="e.g., 123 Main St, Central Park"
+                                placeholder="e.g., Buruburu phase 5, Nairobi CBD opposite Hilton Hotel"
                             />
                         </div>
                     </div>
