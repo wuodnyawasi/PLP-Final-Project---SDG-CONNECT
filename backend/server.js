@@ -35,15 +35,29 @@ app.set('trust proxy', 1);
 
 // Middleware
 app.use(cors({
-  origin: [
-    process.env.FRONTEND_URL || 'https://plp-final-project-sdg-connect.onrender.com',
-    'https://plp-final-project-sdg-connect.vercel.app',
-    'https://plp-final-project-sdg-connect-kwy26p0mw-michael-saokes-projects.vercel.app',
-    'http://localhost:3000', // For local development
-  ],
+  origin: function (origin, callback) {
+    // Allow requests with no origin (like mobile apps or curl requests)
+    if (!origin) return callback(null, true);
+
+    const allowedOrigins = [
+      process.env.FRONTEND_URL || 'https://plp-final-project-sdg-connect.onrender.com',
+      'https://plp-final-project-sdg-connect.vercel.app',
+      'https://plp-final-project-sdg-connect-kwy26p0mw-michael-saokes-projects.vercel.app',
+      'http://localhost:3000', // For local development
+    ];
+
+    // Check if the origin is in the allowed list
+    if (allowedOrigins.indexOf(origin) !== -1) {
+      return callback(null, true);
+    }
+
+    // For debugging - log the origin that's being blocked
+    console.log('CORS blocked origin:', origin);
+    return callback(new Error('Not allowed by CORS'));
+  },
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
 }));
 app.use(express.json());
 app.use(apiLimiter); // Apply general rate limiting to all routes
