@@ -87,17 +87,44 @@ mongoose.connect(process.env.MONGODB_URI || 'mongodb+srv://your-mongodb-connecti
   .catch(err => console.error('MongoDB connection error:', err));
 
 // Create transporter for sending emails
-const transporter = nodemailer.createTransport({
-  host: 'smtp.gmail.com',
-  port: 465,
-  secure: true, // true for 465
-  auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS,
-  },
-  connectionTimeout: 10000, // 10 seconds
-  greetingTimeout: 10000,
-});
+// For production (Render), use SendPulse, SendGrid or similar service
+// For local development, fallback to Gmail
+const createTransporter = () => {
+  if (process.env.SENDPULSE_SMTP_USER && process.env.SENDPULSE_SMTP_PASS) {
+    // Use SendPulse for production
+    return nodemailer.createTransport({
+      host: 'smtp-pulse.com',
+      port: 465,
+      secure: true,
+      auth: {
+        user: process.env.SENDPULSE_SMTP_USER,
+        pass: process.env.SENDPULSE_SMTP_PASS,
+      },
+    });
+  } else if (process.env.SENDGRID_API_KEY) {
+    // Fallback to SendGrid for production
+    return nodemailer.createTransport({
+      host: 'smtp.sendgrid.net',
+      port: 587,
+      secure: false,
+      auth: {
+        user: 'apikey',
+        pass: process.env.SENDGRID_API_KEY,
+      },
+    });
+  } else {
+    // Fallback to Gmail for local development
+    return nodemailer.createTransport({
+      service: 'gmail',
+      auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS,
+      },
+    });
+  }
+};
+
+const transporter = createTransporter();
 
 // Contact form endpoint
 app.post('/api/contact', async (req, res) => {
