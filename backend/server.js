@@ -89,49 +89,8 @@ mongoose.connect(process.env.MONGODB_URI || 'mongodb+srv://your-mongodb-connecti
   .then(() => console.log('MongoDB connected'))
   .catch(err => console.error('MongoDB connection error:', err));
 
-// Create transporter for sending emails
-// For production (Render), use SendPulse, SendGrid or similar service
-// For local development, fallback to Gmail
-const createTransporter = () => {
-  if (process.env.SENDPULSE_SMTP_USER && process.env.SENDPULSE_SMTP_PASS) {
-    // Use SendPulse for production
-    return nodemailer.createTransport({
-      host: 'smtp-pulse.com',
-      port: 465,
-      secure: true,
-      auth: {
-        user: process.env.SENDPULSE_SMTP_USER,
-        pass: process.env.SENDPULSE_SMTP_PASS,
-      },
-    });
-  } else if (process.env.SENDGRID_API_KEY) {
-    // Fallback to SendGrid for production
-    return nodemailer.createTransport({
-      host: 'smtp.sendgrid.net',
-      port: 587,
-      secure: false,
-      auth: {
-        user: 'apikey',
-        pass: process.env.SENDGRID_API_KEY,
-      },
-    });
-  } else {
-    // Fallback to Gmail for local development
-    return nodemailer.createTransport({
-      host: 'smtp.gmail.com',
-      port: 587,
-      secure: false, // true for 465, false for other ports
-      auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS,
-      },
-      tls: {
-        rejectUnauthorized: false,
-      },
-    });
-  }
-};
-
+// Create email transporter (now using the utility function)
+const createTransporter = require('./utils/email');
 const transporter = createTransporter();
 
 // Contact form endpoint
