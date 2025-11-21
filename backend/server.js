@@ -115,7 +115,7 @@ app.post('/api/contact', async (req, res) => {
     // Email options
     const mailOptions = {
       from: 'onboarding@resend.dev', // Resend requires verified sender
-      to: 'owadgijagor@gmail.com',
+      to: 'saoke97@gmail.com', // Account owner's email for testing
       subject: `Contact Form: ${subject}`,
       html: `
         <h2>New Contact Form Submission</h2>
