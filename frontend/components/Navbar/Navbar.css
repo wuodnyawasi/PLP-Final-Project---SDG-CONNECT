@@ -144,17 +144,58 @@
 
 /* === Responsive: Small Screens: Color Alignment === */
 @media (max-width: 768px) {
-  /* ... (Existing responsive styles for .navbar-menu layout) ... */
+  .navbar {
+    padding: 15px 20px;
+    flex-wrap: wrap;
+  }
+
+  .logo-text {
+    font-size: 1.5em;
+    height: auto;
+    line-height: normal;
+    margin-bottom: 10px;
+  }
+
+  /* Show hamburger menu toggle */
+  .menu-toggle {
+    display: block;
+    order: 2;
+  }
+
+  /* Hide navbar menu by default on mobile */
+  .navbar-menu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: #003366;
+    flex-direction: column;
+    gap: 0;
+    padding: 20px 0;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border-top: 1px solid #004d99;
+  }
+
+  /* Show menu when active */
+  .navbar-menu.active {
+    display: flex;
+  }
 
   /* Dropdown Menu Below: */
   /* Make links full width to fill the column space */
   .navbar-menu li a {
     width: 100%;
     text-align: center;
-    padding: 10px 0; /* Increase vertical padding for better touch targets */
-    border-bottom: none !important; /* Remove desktop underline */
+    padding: 15px 0; /* Increase vertical padding for better touch targets */
+    border-bottom: 1px solid rgba(0, 168, 157, 0.2);
+    display: block;
   }
-  
+
+  .navbar-menu li:last-child a {
+    border-bottom: none;
+  }
+
   /* Style the entire list item for the active page on mobile */
   .navbar-menu li.active {
     /* Highlight the active link with a background color */
@@ -164,5 +205,33 @@
   /* Ensure the text is still the accent color on the active mobile link */
   .navbar-menu li.active a {
     color: #00a89d;
+    border-bottom: none;
+  }
+
+  /* Adjust navbar right section for mobile */
+  .navbar-right {
+    order: 3;
+    width: 100%;
+    justify-content: space-between;
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 1px solid rgba(0, 168, 157, 0.2);
+  }
+
+  .user-info {
+    flex-direction: column;
+    gap: 10px;
+    align-items: flex-start;
+  }
+
+  .user-name {
+    font-size: 14px;
+  }
+
+  .admin-link {
+    color: #00a89d;
+    text-decoration: none;
+    font-size: 14px;
+    padding: 5px 0;
   }
 }
