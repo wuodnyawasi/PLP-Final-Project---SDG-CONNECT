@@ -54,7 +54,8 @@ app.use((req, res, next) => {
   next();
 });
 
-// Note: Static file serving removed as images are now hosted on Cloudinary
+// Serve static files from the React app build directory
+app.use(express.static(path.join(__dirname, '../frontend/dist')));
 
 // Configure multer for file uploads
 const storage = multer.memoryStorage();
@@ -2114,13 +2115,7 @@ app.get('/api/user/impact', async (req, res) => {
   }
 });
 
-// Serve static files from the React app build directory
-app.use(express.static(path.resolve(__dirname, '../frontend/dist')));
-
-// Catch all handler: send back React's index.html file for client-side routing
-app.get('*', (req, res) => {
-  res.sendFile(path.resolve(__dirname, '../frontend/dist/index.html'));
-});
+// Note: Frontend is deployed separately on Vercel, so no static file serving needed here
 
 // Error handling middleware (must be last)
 app.use(errorHandler);
