@@ -42,6 +42,8 @@ app.use(cors({
     'http://localhost:3000', // For local development
   ],
   credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
 }));
 app.use(express.json());
 app.use(apiLimiter); // Apply general rate limiting to all routes
