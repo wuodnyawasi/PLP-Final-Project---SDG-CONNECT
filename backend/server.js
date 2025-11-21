@@ -1918,10 +1918,21 @@ app.get('/api/projects/:id', async (req, res) => {
 
 // M-Pesa access token generation
 async function getMpesaAccessToken() {
+  console.log('M-Pesa Environment Variables Check:');
+  console.log('MPESA_CONSUMER_KEY:', process.env.MPESA_CONSUMER_KEY ? 'Set' : 'Not set');
+  console.log('MPESA_CONSUMER_SECRET:', process.env.MPESA_CONSUMER_SECRET ? 'Set' : 'Not set');
+  console.log('MPESA_BUSINESS_SHORTCODE:', process.env.MPESA_BUSINESS_SHORTCODE);
+  console.log('MPESA_PASSKEY:', process.env.MPESA_PASSKEY ? 'Set' : 'Not set');
+  console.log('MPESA_ENVIRONMENT:', process.env.MPESA_ENVIRONMENT);
+
   // Check if credentials are configured (not placeholder values)
   if (process.env.MPESA_CONSUMER_KEY === 'your-mpesa-consumer-key' ||
       process.env.MPESA_CONSUMER_SECRET === 'your-mpesa-consumer-secret') {
     throw new Error('M-Pesa credentials not configured. Please set valid MPESA_CONSUMER_KEY and MPESA_CONSUMER_SECRET environment variables from Safaricom Developer Portal.');
+  }
+
+  if (!process.env.MPESA_CONSUMER_KEY || !process.env.MPESA_CONSUMER_SECRET) {
+    throw new Error('M-Pesa consumer key and secret are required');
   }
 
   const auth = Buffer.from(`${process.env.MPESA_CONSUMER_KEY}:${process.env.MPESA_CONSUMER_SECRET}`).toString('base64');
