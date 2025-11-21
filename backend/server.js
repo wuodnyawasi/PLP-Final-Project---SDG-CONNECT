@@ -114,7 +114,7 @@ app.post('/api/contact', async (req, res) => {
 
     // Email options
     const mailOptions = {
-      from: process.env.EMAIL_USER,
+      from: 'onboarding@resend.dev', // Resend requires verified sender
       to: 'owadgijagor@gmail.com',
       subject: `Contact Form: ${subject}`,
       html: `

@@ -1,30 +1,24 @@
-const { TransactionalEmailsApi, TransactionalEmailsApiApiKeys } = require('@getbrevo/brevo');
+const { Resend } = require('resend');
 
 const createEmailClient = () => {
-  const apiKey = process.env.BREVO_API_KEY;
+  const apiKey = process.env.RESEND_API_KEY;
   if (!apiKey) {
-    throw new Error('BREVO_API_KEY environment variable is not set');
+    throw new Error('RESEND_API_KEY environment variable is not set');
   }
 
-  const apiInstance = new TransactionalEmailsApi();
-  apiInstance.setApiKey(TransactionalEmailsApiApiKeys.apiKey, apiKey);
-
-  return apiInstance;
+  return new Resend(apiKey);
 };
 
 const sendEmail = async (mailOptions) => {
-  const apiInstance = createEmailClient();
-
-  const sendSmtpEmail = {
-    sender: { email: mailOptions.from },
-    to: [{ email: mailOptions.to }],
-    subject: mailOptions.subject,
-    textContent: mailOptions.text,
-    htmlContent: mailOptions.html,
-  };
+  const resend = createEmailClient();
 
   try {
-    const result = await apiInstance.sendTransacEmail(sendSmtpEmail);
+    const result = await resend.emails.send({
+      from: mailOptions.from,
+      to: mailOptions.to,
+      subject: mailOptions.subject,
+      html: mailOptions.html,
+    });
     console.log('Email sent successfully:', result);
     return result;
   } catch (error) {
