@@ -33,12 +33,16 @@ const ProjectEventModal = ({ isOpen, onClose }) => {
     };
 
     const handleSdgChange = (sdg) => {
-        setFormData(prev => ({
-            ...prev,
-            sdgs: prev.sdgs.includes(sdg)
+        setFormData(prev => {
+            const newSdgs = prev.sdgs.includes(sdg)
                 ? prev.sdgs.filter(s => s !== sdg)
-                : [...prev.sdgs, sdg]
-        }));
+                : [...prev.sdgs, sdg];
+            console.log('SDG changed:', sdg, 'New sdgs:', newSdgs);
+            return {
+                ...prev,
+                sdgs: newSdgs
+            };
+        });
     };
 
     const handleFileChange = (e) => {
@@ -71,6 +75,13 @@ const ProjectEventModal = ({ isOpen, onClose }) => {
         e.preventDefault();
         setLoading(true);
         setMessage('');
+
+        // Client-side validation
+        if (formData.sdgs.length === 0) {
+            setMessage('Please select at least one SDG.');
+            setLoading(false);
+            return;
+        }
 
         try {
             const token = localStorage.getItem('token');
