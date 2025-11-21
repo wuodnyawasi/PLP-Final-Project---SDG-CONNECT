@@ -51,6 +51,7 @@ const LoginModal = ({ isOpen, onClose }) => {
     e.preventDefault();
     if (!validateForm()) return;
 
+    setIsLoading(true);
     try {
       const endpoint = isLogin ? '/api/login' : '/api/register';
       const payload = isLogin
@@ -82,6 +83,7 @@ const LoginModal = ({ isOpen, onClose }) => {
           setFormData({ email: '', password: '', name: '', confirmPassword: '' });
           setErrors({});
           setMessage('');
+          setIsLoading(false);
           onClose();
         }, 2000);
       } else {
@@ -94,10 +96,12 @@ const LoginModal = ({ isOpen, onClose }) => {
         } else {
           setErrors({ general: data.error });
         }
+        setIsLoading(false);
       }
     } catch (error) {
       console.error('Authentication error:', error);
       setErrors({ general: 'Network error. Please try again.' });
+      setIsLoading(false);
     }
   };
 
@@ -118,19 +122,21 @@ const LoginModal = ({ isOpen, onClose }) => {
                 value={formData.name}
                 onChange={handleChange}
                 placeholder="Enter your name"
+                disabled={isLoading}
               />
               {errors.name && <span className="error">{errors.name}</span>}
             </div>
           )}
           <div className="form-group">
             <label>Email</label>
-            <input
-              type="email"
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
-              placeholder="Enter your email"
-            />
+              <input
+                type="email"
+                name="email"
+                value={formData.email}
+                onChange={handleChange}
+                placeholder="Enter your email"
+                disabled={isLoading}
+              />
             {errors.email && <span className="error">{errors.email}</span>}
           </div>
           <div className="form-group">
@@ -144,6 +150,7 @@ const LoginModal = ({ isOpen, onClose }) => {
                 onFocus={() => !isLogin && setShowPasswordRules(true)}
                 onBlur={() => setShowPasswordRules(false)}
                 placeholder="Enter your password"
+                disabled={isLoading}
               />
               <button
                 type="button"
@@ -189,8 +196,15 @@ const LoginModal = ({ isOpen, onClose }) => {
               {errors.confirmPassword && <span className="error">{errors.confirmPassword}</span>}
             </div>
           )}
-          <button type="submit" className="submit-btn">
-            {isLogin ? 'Login' : 'Register'}
+          <button type="submit" className="submit-btn" disabled={isLoading}>
+            {isLoading ? (
+              <>
+                <span className="spinner"></span>
+                {isLogin ? 'Logging in...' : 'Registering...'}
+              </>
+            ) : (
+              isLogin ? 'Login' : 'Register'
+            )}
           </button>
         </form>
         {message && <p className="message">{message}</p>}

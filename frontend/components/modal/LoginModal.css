@@ -119,8 +119,28 @@ form {
   text-align: center;
 }
 
-.submit-btn:hover {
+.submit-btn:hover:not(:disabled) {
   background-color: #00a89d;
+}
+
+.submit-btn:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.spinner {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  border: 2px solid #ffffff;
+  border-radius: 50%;
+  border-top-color: transparent;
+  animation: spin 1s ease-in-out infinite;
+  margin-right: 8px;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
 }
 
 .message {

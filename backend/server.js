@@ -29,9 +29,8 @@ cloudinary.config({
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-// Trust proxy disabled; rate limiting uses custom keyGenerator to handle proxies
+// Trust proxy for cloud deployments (Render uses 1 proxy layer)
 app.set('trust proxy', 1);
-app.set('trust proxy', false);
 
 // Middleware
 app.use(cors({
@@ -1814,6 +1813,12 @@ app.get('/api/projects/:id', async (req, res) => {
 
 // M-Pesa access token generation
 async function getMpesaAccessToken() {
+  // Check if credentials are configured (not placeholder values)
+  if (process.env.MPESA_CONSUMER_KEY === 'your-mpesa-consumer-key' ||
+      process.env.MPESA_CONSUMER_SECRET === 'your-mpesa-consumer-secret') {
+    throw new Error('M-Pesa credentials not configured. Please set valid MPESA_CONSUMER_KEY and MPESA_CONSUMER_SECRET environment variables from Safaricom Developer Portal.');
+  }
+
   const auth = Buffer.from(`${process.env.MPESA_CONSUMER_KEY}:${process.env.MPESA_CONSUMER_SECRET}`).toString('base64');
 
   try {
@@ -1830,6 +1835,9 @@ async function getMpesaAccessToken() {
     return response.data.access_token;
   } catch (error) {
     console.error('Error getting M-Pesa access token:', error);
+    if (error.response?.status === 400) {
+      throw new Error('Invalid M-Pesa credentials. Please check your MPESA_CONSUMER_KEY and MPESA_CONSUMER_SECRET.');
+    }
     throw new Error('Failed to get M-Pesa access token');
   }
 }
