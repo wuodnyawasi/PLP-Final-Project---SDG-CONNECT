@@ -54,7 +54,7 @@ const ProjectDetailsModal = ({ isOpen, onClose, project, onProjectUpdate }) => {
         try {
             const token = localStorage.getItem('token');
             const promises = selectedParticipants.map(id =>
-                fetch(`http://localhost:5000/api/contributors/${id}/attend`, {
+                fetch(`https://plp-final-project-sdg-connect.onrender.com/api/contributors/${id}/attend`, {
                      method: 'PUT',
                     headers: {
                         'Authorization': `Bearer ${token}`,
@@ -80,7 +80,7 @@ const ProjectDetailsModal = ({ isOpen, onClose, project, onProjectUpdate }) => {
         try {
             const token = localStorage.getItem('token');
             if (token && currentProject.id) {
-            const response = await fetch(`http://localhost:5000/api/projects/${currentProject.id}?t=${Date.now()}`, {
+            const response = await fetch(`https://plp-final-project-sdg-connect.onrender.com/api/projects/${currentProject.id}?t=${Date.now()}`, {
                 headers: {
                     'Authorization': `Bearer ${token}`,
                 },
@@ -107,7 +107,7 @@ const ProjectDetailsModal = ({ isOpen, onClose, project, onProjectUpdate }) => {
         try {
             const token = localStorage.getItem('token');
             const promises = selectedResources.map(id =>
-                fetch(`http://localhost:5000/api/contributors/${id}/deliver`, {
+                fetch(`https://plp-final-project-sdg-connect.onrender.com/api/contributors/${id}/deliver`, {
                     method: 'PUT',
                     headers: {
                         'Authorization': `Bearer ${token}`,

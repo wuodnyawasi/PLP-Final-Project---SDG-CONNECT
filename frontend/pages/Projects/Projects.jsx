@@ -33,7 +33,7 @@ const ProjectListing = () => {
     const fetchProjects = async () => {
         setLoading(true);
         try {
-            const response = await fetch(`http://localhost:5000/api/projects/public`);
+            const response = await fetch(`https://plp-final-project-sdg-connect.onrender.com/api/projects/public`);
             if (response.ok) {
                 const data = await response.json();
                 setProjects(data.projects);
@@ -252,16 +252,19 @@ const ProjectListing = () => {
                             <div key={project.id} className="project-card">
                                 <div className="card-image-wrapper">
                                     {project.projectImage ? (
-                                        <img
-                                            src={project.projectImage.startsWith('http') ? project.projectImage : `http://localhost:5000${project.projectImage}`}
-                                            alt={project.title}
-                                            className="card-image"
-                                        />
-                                    ) : (
-                                        <div className="no-image">
-                                            <FaTag size={40} />
-                                        </div>
-                                    )}
+                                            <img
+                                                src={project.projectImage.startsWith('http') 
+                                                    ? project.projectImage 
+                                                    : `https://plp-final-project-sdg-connect.onrender.com${project.projectImage}`}
+                                                alt={project.title}
+                                                className="card-image"
+                                            />
+                                        ) : (
+                                            <div className="no-image">
+                                                <FaTag size={40} />
+                                            </div>
+                                        )}
+
                                     {project.sdgs && project.sdgs.length > 0 && (
                                         <span
                                             className="sdg-badge"
