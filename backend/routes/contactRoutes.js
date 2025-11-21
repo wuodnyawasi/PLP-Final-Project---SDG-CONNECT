@@ -1,8 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const Contact = require('../models/Contact');
-const createTransporter = require('../utils/email');
-const transporter = createTransporter();
+const { sendEmail } = require('../utils/email');
 
 // POST /api/contact
 router.post('/', async (req, res) => {
@@ -26,12 +25,16 @@ router.post('/', async (req, res) => {
       text: `Name: ${name}\nEmail: ${email}\nSubject: ${subject}\nMessage: ${message}`,
     };
 
-    await transporter.sendMail(mailOptions);
+    await sendEmail(mailOptions);
 
     res.status(200).json({ message: 'Message sent successfully' });
   } catch (error) {
     console.error('Error sending contact message:', error);
-    res.status(500).json({ message: 'Failed to send message' });
+    // Log additional details for debugging
+    if (error.response) {
+      console.error('Brevo API response error:', error.response.data);
+    }
+    res.status(500).json({ message: 'Failed to send message', error: error.message });
   }
 });
 

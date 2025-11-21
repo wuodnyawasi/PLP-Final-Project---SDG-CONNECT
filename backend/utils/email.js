@@ -1,22 +1,35 @@
-const nodemailer = require('nodemailer');
+const { TransactionalEmailsApi, TransactionalEmailsApiApiKeys } = require('@getbrevo/brevo');
 
-const createTransporter = () => {
-  // Use Brevo for email sending
-  return nodemailer.createTransport({
-    host: 'smtp-relay.brevo.com',
-    port: 587,
-    secure: false, // true for 465, false for other ports
-    auth: {
-      user: process.env.BREVO_SMTP_USER || '9c355e001@smtp-brevo.com',
-      pass: process.env.BREVO_SMTP_PASS || 'wL1FqkmAdUzrRIV3',
-    },
-    // Add timeout to prevent connection timeout errors
-    connectionTimeout: 60000, // 60 seconds
-    socketTimeout: 60000,
-    // Enable debug logging
-    debug: true,
-    logger: true,
-  });
+const createEmailClient = () => {
+  const apiKey = process.env.BREVO_API_KEY;
+  if (!apiKey) {
+    throw new Error('BREVO_API_KEY environment variable is not set');
+  }
+
+  const apiInstance = new TransactionalEmailsApi();
+  apiInstance.setApiKey(TransactionalEmailsApiApiKeys.apiKey, apiKey);
+
+  return apiInstance;
 };
 
-module.exports = createTransporter;
+const sendEmail = async (mailOptions) => {
+  const apiInstance = createEmailClient();
+
+  const sendSmtpEmail = {
+    sender: { email: mailOptions.from },
+    to: [{ email: mailOptions.to }],
+    subject: mailOptions.subject,
+    textContent: mailOptions.text,
+  };
+
+  try {
+    const result = await apiInstance.sendTransacEmail(sendSmtpEmail);
+    console.log('Email sent successfully:', result);
+    return result;
+  } catch (error) {
+    console.error('Error sending email:', error);
+    throw error;
+  }
+};
+
+module.exports = { sendEmail };
