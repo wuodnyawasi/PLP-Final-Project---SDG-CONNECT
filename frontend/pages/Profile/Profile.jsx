@@ -35,7 +35,7 @@ const UserProfile = () => {
             }
 
             try {
-                const response = await fetch(`${import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000'}/api/profile`, {
+                const response = await fetch(`${import.meta.env.VITE_API_BASE_URL || 'https://plp-final-project-sdg-connect.onrender.com'}/api/profile`, {
                     headers: {
                         'Authorization': `Bearer ${token}`,
                         'Content-Type': 'application/json',
@@ -75,7 +75,7 @@ const UserProfile = () => {
         setUsersLoading(true);
         try {
             const token = localStorage.getItem('token');
-      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000'}/api/admin/users`, {
+      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL || 'https://plp-final-project-sdg-connect.onrender.com'}/api/admin/users`, {
         headers: {
           'Authorization': `Bearer ${token}`
         }
@@ -98,7 +98,7 @@ const UserProfile = () => {
         setProjectsLoading(true);
         try {
             const token = localStorage.getItem('token');
-            const response = await fetch('http://localhost:5000/api/projects', {
+            const response = await fetch(`${import.meta.env.VITE_API_BASE_URL || 'https://plp-final-project-sdg-connect.onrender.com'}/api/projects`, {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
@@ -191,7 +191,7 @@ const UserProfile = () => {
 
         try {
             const token = localStorage.getItem('token');
-            const response = await fetch(`http://localhost:5000/api/admin/users/${userId}`, {
+            const response = await fetch(`${import.meta.env.VITE_API_BASE_URL || 'https://plp-final-project-sdg-connect.onrender.com'}/api/admin/users/${userId}`, {
                 method: 'DELETE',
                 headers: {
                     'Authorization': `Bearer ${token}`
