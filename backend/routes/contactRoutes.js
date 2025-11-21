@@ -21,7 +21,7 @@ router.post('/', async (req, res) => {
     // Send email notification
     const mailOptions = {
       from: process.env.FROM_EMAIL || 'noreply@sdgconnect.org',
-      to: 'info@sdgconnect.org',
+      to: 'owadgijagor@gmail.com',
       subject: `New Contact Form Submission: ${subject}`,
       text: `Name: ${name}\nEmail: ${email}\nSubject: ${subject}\nMessage: ${message}`,
     };
