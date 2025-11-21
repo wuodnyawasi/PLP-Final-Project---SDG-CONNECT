@@ -13,6 +13,7 @@ const Project = require('./models/Project');
 const Contributor = require('./models/Contributor');
 const Settings = require('./models/Settings');
 const Donation = require('./models/Donation');
+const Contact = require('./models/Contact');
 const errorHandler = require('./middleware/errorHandler');
 const { validateRegistration, validateLogin, validateProjectCreation } = require('./middleware/validation');
 const { apiLimiter, authLimiter, sensitiveLimiter } = require('./middleware/rateLimiter');
@@ -38,7 +39,7 @@ app.use(cors({
     process.env.FRONTEND_URL || 'https://plp-final-project-sdg-connect.onrender.com',
     'https://plp-final-project-sdg-connect.vercel.app',
     'https://plp-final-project-sdg-connect-kwy26p0mw-michael-saokes-projects.vercel.app',
-    'http://localhost:3000' // For local development
+    'http://localhost:3000', // For local development
   ],
   credentials: true,
 }));
@@ -106,6 +107,15 @@ app.post('/api/contact', async (req, res) => {
   }
 
   try {
+    // Save contact message to database
+    const contact = new Contact({
+      name,
+      email,
+      subject,
+      message,
+    });
+    await contact.save();
+
     // Email options
     const mailOptions = {
       from: process.env.EMAIL_USER,
@@ -122,12 +132,18 @@ app.post('/api/contact', async (req, res) => {
     };
 
     // Send email
-    await transporter.sendMail(mailOptions);
+    try {
+      await transporter.sendMail(mailOptions);
+      console.log('Contact email sent successfully');
+    } catch (emailError) {
+      console.error('Error sending contact email:', emailError);
+      // Continue with success response even if email fails
+    }
 
-    res.status(200).json({ message: 'Email sent successfully' });
+    res.status(200).json({ message: 'Message sent successfully' });
   } catch (error) {
-    console.error('Error sending email:', error);
-    res.status(500).json({ error: 'Failed to send email' });
+    console.error('Error processing contact form:', error);
+    res.status(500).json({ error: 'Failed to send message' });
   }
 });
 
@@ -255,10 +271,10 @@ app.put('/api/profile', upload.single('profilePicture'), sanitizeUserInput, asyn
   } = req.body;
 
   // Validate required fields - for updates, keep existing values if not provided
-  if (!name && !user.name) {
+  if (!name && !req.user.name) {
     return res.status(400).json({ error: 'Name is required' });
   }
-  if (!email && !user.email) {
+  if (!email && !req.user.email) {
     return res.status(400).json({ error: 'Email is required' });
   }
 
@@ -293,7 +309,7 @@ app.put('/api/profile', upload.single('profilePicture'), sanitizeUserInput, asyn
             (error, result) => {
               if (error) reject(error);
               else resolve(result);
-            }
+            },
           );
           uploadStream.end(req.file.buffer);
         });
@@ -489,6 +505,7 @@ app.get('/api/admin/stats', requireAdmin, async (req, res) => {
     const totalProjects = await Project.countDocuments();
     const pendingProjects = await Project.countDocuments({ status: 'pending' });
     const totalDonations = await Donation.countDocuments();
+    const totalContacts = await Contact.countDocuments();
     const totalDonatedResult = await Donation.aggregate([
       { $match: { status: 'completed' } },
       { $group: { _id: null, total: { $sum: '$amount' } } },
@@ -502,6 +519,7 @@ app.get('/api/admin/stats', requireAdmin, async (req, res) => {
       totalProjects,
       pendingProjects,
       totalDonations,
+      totalContacts,
       totalDonated,
     });
   } catch (error) {
@@ -925,7 +943,7 @@ app.post('/api/projects', upload.single('projectImage'), sanitizeProjectInput, v
             (error, result) => {
               if (error) reject(error);
               else resolve(result);
-            }
+            },
           );
           uploadStream.end(req.file.buffer);
         });
@@ -1497,6 +1515,48 @@ app.put('/api/contributors/:id/deliver', async (req, res) => {
     res.json({ message: 'Resource marked as delivered', contributor });
   } catch (error) {
     console.error('Mark delivered error:', error);
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
+// Admin Contact Messages endpoints
+app.get('/api/admin/contacts', requireAdmin, async (req, res) => {
+  try {
+    const { page = 1, limit = 10 } = req.query;
+    const skip = (page - 1) * limit;
+
+    const contacts = await Contact.find({})
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(parseInt(limit));
+
+    const total = await Contact.countDocuments();
+
+    res.json({
+      contacts,
+      total,
+      page: parseInt(page),
+      pages: Math.ceil(total / limit),
+    });
+  } catch (error) {
+    console.error('Admin contacts fetch error:', error);
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
+app.delete('/api/admin/contacts/:id', requireAdmin, async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const contact = await Contact.findByIdAndDelete(id);
+
+    if (!contact) {
+      return res.status(404).json({ error: 'Contact message not found' });
+    }
+
+    res.json({ message: 'Contact message deleted successfully' });
+  } catch (error) {
+    console.error('Admin contact delete error:', error);
     res.status(500).json({ error: 'Server error' });
   }
 });
