@@ -135,7 +135,7 @@ const Contact = () => {
                         <FaEnvelope className="info-icon" />
                         <div className="info-text">
                             <h4>General Inquiries</h4>
-                            <p><a href="mailto:info@sdgconnect.org">info@sdgconnect.org</a></p>
+                            <p><a href="mailto:info@sdgconnect.org">owadgijagor@gmail.com</a></p>
                         </div>
                     </div>
                     

@@ -1925,23 +1925,27 @@ async function getMpesaAccessToken() {
   console.log('MPESA_PASSKEY:', process.env.MPESA_PASSKEY ? 'Set' : 'Not set');
   console.log('MPESA_ENVIRONMENT:', process.env.MPESA_ENVIRONMENT);
 
+  // Trim environment variables to remove any accidental spaces
+  const consumerKey = process.env.MPESA_CONSUMER_KEY?.trim();
+  const consumerSecret = process.env.MPESA_CONSUMER_SECRET?.trim();
+
   // Check if credentials are configured (not placeholder values)
-  if (process.env.MPESA_CONSUMER_KEY === 'your-mpesa-consumer-key' ||
-      process.env.MPESA_CONSUMER_SECRET === 'your-mpesa-consumer-secret') {
+  if (consumerKey === 'your-mpesa-consumer-key' ||
+      consumerSecret === 'your-mpesa-consumer-secret') {
     throw new Error('M-Pesa credentials not configured. Please set valid MPESA_CONSUMER_KEY and MPESA_CONSUMER_SECRET environment variables from Safaricom Developer Portal.');
   }
 
-  if (!process.env.MPESA_CONSUMER_KEY || !process.env.MPESA_CONSUMER_SECRET) {
+  if (!consumerKey || !consumerSecret) {
     throw new Error('M-Pesa consumer key and secret are required');
   }
 
-  const auth = Buffer.from(`${process.env.MPESA_CONSUMER_KEY}:${process.env.MPESA_CONSUMER_SECRET}`).toString('base64');
+  const auth = Buffer.from(`${consumerKey}:${consumerSecret}`).toString('base64');
 
   try {
     const response = await axios.get(
-      process.env.MPESA_ENVIRONMENT === 'production'
-        ? 'https://api.safaricom.co.ke/oauth/v1/generate?grant_type=client_credentials'
-        : 'https://sandbox.safaricom.co.ke/oauth/v1/generate?grant_type=client_credentials',
+      process.env.MPESA_ENVIRONMENT === 'sandbox'
+        ? 'https://sandbox.safaricom.co.ke/oauth/v1/generate?grant_type=client_credentials'
+        : 'https://api.safaricom.co.ke/oauth/v1/generate?grant_type=client_credentials',
       {
         headers: {
           Authorization: `Basic ${auth}`,
