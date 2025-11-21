@@ -53,6 +53,8 @@ const validateLogin = (req, res, next) => {
 const validateProjectCreation = (req, res, next) => {
   const { type, title, sdgs, startDate, briefInfo } = req.body;
 
+  console.log('Validation input - sdgs:', sdgs, 'type:', typeof sdgs, 'isArray:', Array.isArray(sdgs), 'length:', sdgs ? sdgs.length : 'undefined');
+
   const errors = [];
 
   if (!type || !['event', 'project'].includes(type)) {
