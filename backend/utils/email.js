@@ -20,6 +20,7 @@ const sendEmail = async (mailOptions) => {
     to: [{ email: mailOptions.to }],
     subject: mailOptions.subject,
     textContent: mailOptions.text,
+    htmlContent: mailOptions.html,
   };
 
   try {
@@ -32,4 +33,10 @@ const sendEmail = async (mailOptions) => {
   }
 };
 
-module.exports = { sendEmail };
+const createTransporter = () => {
+  return {
+    sendMail: sendEmail,
+  };
+};
+
+module.exports = { sendEmail, createTransporter };

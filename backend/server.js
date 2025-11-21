@@ -90,7 +90,7 @@ mongoose.connect(process.env.MONGODB_URI || 'mongodb+srv://your-mongodb-connecti
   .catch(err => console.error('MongoDB connection error:', err));
 
 // Create email transporter (now using the utility function)
-const createTransporter = require('./utils/email');
+const { createTransporter } = require('./utils/email');
 const transporter = createTransporter();
 
 // Contact form endpoint
