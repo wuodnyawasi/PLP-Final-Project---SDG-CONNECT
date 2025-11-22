@@ -168,6 +168,16 @@ app.post('/api/register', authLimiter, validateRegistration, async (req, res) =>
   }
 });
 
+// Logout endpoint
+app.post('/api/logout', (req, res) => {
+  // Since JWT is stateless, we just return success
+  // Client will handle clearing localStorage
+  res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+  res.setHeader('Pragma', 'no-cache');
+  res.setHeader('Expires', '0');
+  res.json({ message: 'Logged out successfully' });
+});
+
 // Login endpoint
 app.post('/api/login', authLimiter, validateLogin, async (req, res) => {
   const { email, password } = req.body;
